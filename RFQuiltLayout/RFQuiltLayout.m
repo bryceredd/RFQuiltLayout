@@ -155,8 +155,6 @@
 
 - (void) fillInBlocksToUnrestrictedRow:(int)endRow {
     
-    NSLog(@"FILLING IN BLOCKS TO %d", endRow);
-    
     BOOL vert = self.direction == UICollectionViewScrollDirectionVertical;
     
     // we'll have our data structure as if we're planning
@@ -206,12 +204,7 @@
         }];
         
         
-        if (!didTraverseAllBlocks) {
-            NSLog(@"did not accept placing for blocksize: %@", NSStringFromCGSize(blockSize));
-            return YES;
-        }
-        
-        NSLog(@"placed block %@", NSStringFromCGPoint(blockOrigin));
+        if (!didTraverseAllBlocks) { return YES; }
         
         // because we have determined that the space is all
         // available, lets fill it in as taken.
