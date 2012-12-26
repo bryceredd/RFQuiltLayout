@@ -1,0 +1,300 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		02E25B07168B74B0009CA089 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02E25B06168B74B0009CA089 /* UIKit.framework */; };
+		02E25B09168B74B0009CA089 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02E25B08168B74B0009CA089 /* Foundation.framework */; };
+		02E25B0B168B74B0009CA089 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02E25B0A168B74B0009CA089 /* CoreGraphics.framework */; };
+		02E25B11168B74B0009CA089 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 02E25B0F168B74B0009CA089 /* InfoPlist.strings */; };
+		02E25B13168B74B0009CA089 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 02E25B12168B74B0009CA089 /* main.m */; };
+		02E25B17168B74B0009CA089 /* RFAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 02E25B16168B74B0009CA089 /* RFAppDelegate.m */; };
+		02E25B19168B74B0009CA089 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 02E25B18168B74B0009CA089 /* Default.png */; };
+		02E25B1B168B74B0009CA089 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02E25B1A168B74B0009CA089 /* Default@2x.png */; };
+		02E25B1D168B74B0009CA089 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02E25B1C168B74B0009CA089 /* Default-568h@2x.png */; };
+		02E25B20168B74B0009CA089 /* RFViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02E25B1F168B74B0009CA089 /* RFViewController.m */; };
+		02E25B23168B74B0009CA089 /* RFViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02E25B21168B74B0009CA089 /* RFViewController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		02E25B02168B74B0009CA089 /* QuiltDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuiltDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		02E25B06168B74B0009CA089 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		02E25B08168B74B0009CA089 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		02E25B0A168B74B0009CA089 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		02E25B0E168B74B0009CA089 /* QuiltDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "QuiltDemo-Info.plist"; sourceTree = "<group>"; };
+		02E25B10168B74B0009CA089 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		02E25B12168B74B0009CA089 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		02E25B14168B74B0009CA089 /* QuiltDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "QuiltDemo-Prefix.pch"; sourceTree = "<group>"; };
+		02E25B15168B74B0009CA089 /* RFAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RFAppDelegate.h; sourceTree = "<group>"; };
+		02E25B16168B74B0009CA089 /* RFAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RFAppDelegate.m; sourceTree = "<group>"; };
+		02E25B18168B74B0009CA089 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		02E25B1A168B74B0009CA089 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		02E25B1C168B74B0009CA089 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		02E25B1E168B74B0009CA089 /* RFViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RFViewController.h; sourceTree = "<group>"; };
+		02E25B1F168B74B0009CA089 /* RFViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RFViewController.m; sourceTree = "<group>"; };
+		02E25B22168B74B0009CA089 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RFViewController.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		02E25AFF168B74B0009CA089 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02E25B07168B74B0009CA089 /* UIKit.framework in Frameworks */,
+				02E25B09168B74B0009CA089 /* Foundation.framework in Frameworks */,
+				02E25B0B168B74B0009CA089 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		02E25AF7168B74B0009CA089 = {
+			isa = PBXGroup;
+			children = (
+				02E25B0C168B74B0009CA089 /* QuiltDemo */,
+				02E25B05168B74B0009CA089 /* Frameworks */,
+				02E25B03168B74B0009CA089 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		02E25B03168B74B0009CA089 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				02E25B02168B74B0009CA089 /* QuiltDemo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		02E25B05168B74B0009CA089 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				02E25B06168B74B0009CA089 /* UIKit.framework */,
+				02E25B08168B74B0009CA089 /* Foundation.framework */,
+				02E25B0A168B74B0009CA089 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		02E25B0C168B74B0009CA089 /* QuiltDemo */ = {
+			isa = PBXGroup;
+			children = (
+				02E25B15168B74B0009CA089 /* RFAppDelegate.h */,
+				02E25B16168B74B0009CA089 /* RFAppDelegate.m */,
+				02E25B1E168B74B0009CA089 /* RFViewController.h */,
+				02E25B1F168B74B0009CA089 /* RFViewController.m */,
+				02E25B21168B74B0009CA089 /* RFViewController.xib */,
+				02E25B0D168B74B0009CA089 /* Supporting Files */,
+			);
+			path = QuiltDemo;
+			sourceTree = "<group>";
+		};
+		02E25B0D168B74B0009CA089 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				02E25B0E168B74B0009CA089 /* QuiltDemo-Info.plist */,
+				02E25B0F168B74B0009CA089 /* InfoPlist.strings */,
+				02E25B12168B74B0009CA089 /* main.m */,
+				02E25B14168B74B0009CA089 /* QuiltDemo-Prefix.pch */,
+				02E25B18168B74B0009CA089 /* Default.png */,
+				02E25B1A168B74B0009CA089 /* Default@2x.png */,
+				02E25B1C168B74B0009CA089 /* Default-568h@2x.png */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		02E25B01168B74B0009CA089 /* QuiltDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 02E25B26168B74B0009CA089 /* Build configuration list for PBXNativeTarget "QuiltDemo" */;
+			buildPhases = (
+				02E25AFE168B74B0009CA089 /* Sources */,
+				02E25AFF168B74B0009CA089 /* Frameworks */,
+				02E25B00168B74B0009CA089 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = QuiltDemo;
+			productName = QuiltDemo;
+			productReference = 02E25B02168B74B0009CA089 /* QuiltDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		02E25AF9168B74B0009CA089 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = RF;
+				LastUpgradeCheck = 0450;
+				ORGANIZATIONNAME = "Bryce Redd";
+			};
+			buildConfigurationList = 02E25AFC168B74B0009CA089 /* Build configuration list for PBXProject "QuiltDemo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 02E25AF7168B74B0009CA089;
+			productRefGroup = 02E25B03168B74B0009CA089 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				02E25B01168B74B0009CA089 /* QuiltDemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		02E25B00168B74B0009CA089 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02E25B11168B74B0009CA089 /* InfoPlist.strings in Resources */,
+				02E25B19168B74B0009CA089 /* Default.png in Resources */,
+				02E25B1B168B74B0009CA089 /* Default@2x.png in Resources */,
+				02E25B1D168B74B0009CA089 /* Default-568h@2x.png in Resources */,
+				02E25B23168B74B0009CA089 /* RFViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		02E25AFE168B74B0009CA089 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02E25B13168B74B0009CA089 /* main.m in Sources */,
+				02E25B17168B74B0009CA089 /* RFAppDelegate.m in Sources */,
+				02E25B20168B74B0009CA089 /* RFViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		02E25B0F168B74B0009CA089 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				02E25B10168B74B0009CA089 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		02E25B21168B74B0009CA089 /* RFViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				02E25B22168B74B0009CA089 /* en */,
+			);
+			name = RFViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		02E25B24168B74B0009CA089 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		02E25B25168B74B0009CA089 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		02E25B27168B74B0009CA089 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "QuiltDemo/QuiltDemo-Prefix.pch";
+				INFOPLIST_FILE = "QuiltDemo/QuiltDemo-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		02E25B28168B74B0009CA089 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "QuiltDemo/QuiltDemo-Prefix.pch";
+				INFOPLIST_FILE = "QuiltDemo/QuiltDemo-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		02E25AFC168B74B0009CA089 /* Build configuration list for PBXProject "QuiltDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				02E25B24168B74B0009CA089 /* Debug */,
+				02E25B25168B74B0009CA089 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		02E25B26168B74B0009CA089 /* Build configuration list for PBXNativeTarget "QuiltDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				02E25B27168B74B0009CA089 /* Debug */,
+				02E25B28168B74B0009CA089 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 02E25AF9168B74B0009CA089 /* Project object */;
+}
