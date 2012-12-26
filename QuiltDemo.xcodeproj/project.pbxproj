@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02894F92168B789E000F26A8 /* RFQuiltLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 02894F91168B789E000F26A8 /* RFQuiltLayout.m */; };
 		02E25B07168B74B0009CA089 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02E25B06168B74B0009CA089 /* UIKit.framework */; };
 		02E25B09168B74B0009CA089 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02E25B08168B74B0009CA089 /* Foundation.framework */; };
 		02E25B0B168B74B0009CA089 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02E25B0A168B74B0009CA089 /* CoreGraphics.framework */; };
@@ -21,6 +22,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		02894F90168B789E000F26A8 /* RFQuiltLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFQuiltLayout.h; sourceTree = "<group>"; };
+		02894F91168B789E000F26A8 /* RFQuiltLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFQuiltLayout.m; sourceTree = "<group>"; };
 		02E25B02168B74B0009CA089 /* QuiltDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuiltDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02E25B06168B74B0009CA089 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		02E25B08168B74B0009CA089 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -83,6 +86,7 @@
 		02E25B0C168B74B0009CA089 /* QuiltDemo */ = {
 			isa = PBXGroup;
 			children = (
+				02E25B29168B74C9009CA089 /* TVQuiltLayout */,
 				02E25B15168B74B0009CA089 /* RFAppDelegate.h */,
 				02E25B16168B74B0009CA089 /* RFAppDelegate.m */,
 				02E25B1E168B74B0009CA089 /* RFViewController.h */,
@@ -105,6 +109,15 @@
 				02E25B1C168B74B0009CA089 /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		02E25B29168B74C9009CA089 /* TVQuiltLayout */ = {
+			isa = PBXGroup;
+			children = (
+				02894F90168B789E000F26A8 /* RFQuiltLayout.h */,
+				02894F91168B789E000F26A8 /* RFQuiltLayout.m */,
+			);
+			name = TVQuiltLayout;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -177,6 +190,7 @@
 				02E25B13168B74B0009CA089 /* main.m in Sources */,
 				02E25B17168B74B0009CA089 /* RFAppDelegate.m in Sources */,
 				02E25B20168B74B0009CA089 /* RFViewController.m in Sources */,
+				02894F92168B789E000F26A8 /* RFQuiltLayout.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,7 +272,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "QuiltDemo/QuiltDemo-Prefix.pch";
 				INFOPLIST_FILE = "QuiltDemo/QuiltDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -269,7 +285,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "QuiltDemo/QuiltDemo-Prefix.pch";
 				INFOPLIST_FILE = "QuiltDemo/QuiltDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -293,6 +311,7 @@
 				02E25B28168B74B0009CA089 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

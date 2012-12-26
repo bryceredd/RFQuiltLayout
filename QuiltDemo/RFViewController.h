@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "RFQuiltLayout.h"
 
-@interface RFViewController : UIViewController
+@interface RFViewController : UIViewController <RFQuiltLayoutDelegate>
 
 @end
