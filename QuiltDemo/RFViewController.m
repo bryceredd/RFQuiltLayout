@@ -20,8 +20,12 @@
     
     RFQuiltLayout* layout = (id)[self.collectionView collectionViewLayout];
     layout.direction = UICollectionViewScrollDirectionVertical;
-    layout.blockPixels = CGSizeMake(100, 100);
+    layout.blockPixels = CGSizeMake(50, 50);
     
+    [self.collectionView reloadData];
+}
+
+- (void) viewDidAppear:(BOOL)animated {
     [self.collectionView reloadData];
 }
 

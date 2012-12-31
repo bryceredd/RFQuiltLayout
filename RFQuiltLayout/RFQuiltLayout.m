@@ -115,6 +115,7 @@
     self.firstOpenSpace = CGPointZero;
     self.previousLayoutRect = CGRectZero;
     self.previousLayoutAttributes = nil;
+    self.lastIndexPathPlaced = nil;
     [self clearPositions];
 }
 
