@@ -165,7 +165,7 @@
     for (int section=self.lastIndexPathPlaced.section; section<numSections; section++) {
         int numRows = [self.collectionView numberOfItemsInSection:section];
         
-        for (int row=self.lastIndexPathPlaced.row+1; row<numRows; row++) {
+        for (int row=(!self.lastIndexPathPlaced? 0 : self.lastIndexPathPlaced.row+1); row<numRows; row++) {
             NSIndexPath* indexPath = [NSIndexPath indexPathForRow:row inSection:section];
             
             if([self placeBlockAtIndex:indexPath]) {

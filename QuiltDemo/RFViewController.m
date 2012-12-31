@@ -43,14 +43,15 @@
 #pragma mark – RFQuiltLayoutDelegate
 
 - (CGSize) blockSizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row % 10 == 0)
+    /*if (indexPath.row % 10 == 0)
         return CGSizeMake(3, 1);
     else if (indexPath.row % 7 == 0)
         return CGSizeMake(1, 3);
     else if (indexPath.row % 8 == 0)
         return CGSizeMake(1, 2);
     else if(indexPath.row % 11 == 0)
-        return CGSizeMake(2, 2);
+        return CGSizeMake(2, 2);*/
+    if (indexPath.row == 0) return CGSizeMake(5, 5);
     
     return CGSizeMake(1, 1);
 }
