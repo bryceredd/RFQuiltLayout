@@ -24,4 +24,6 @@
 // improve scrolling speed, at the cost of time at the beginning
 @property (nonatomic) BOOL predrawEverything;
 
+// Inter-item spacing like Flow Layout
+@property (nonatomic) CGFloat minimumInteritemSpacing;
 @end
