@@ -132,7 +132,10 @@
         unrestrictedRow = (self.collectionView.frame.size.height / [self blockPixels].height)+1;
     else
         unrestrictedRow = (self.collectionView.frame.size.width / [self blockPixels].width)+1;
-    
+	
+	if (self.predrawEverything) {
+		unrestrictedRow=INT32_MAX;
+	}
     [self fillInBlocksToUnrestrictedRow:unrestrictedRow];
 }
 
