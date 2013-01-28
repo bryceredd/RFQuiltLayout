@@ -65,7 +65,6 @@
         return CGSizeMake(self.collectionView.frame.size.width, (self.furthestBlockPoint.y+1) * self.blockPixels.height);
     else
         return CGSizeMake((self.furthestBlockPoint.x+1) * self.blockPixels.width, self.collectionView.frame.size.height);
-    
 }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
@@ -89,6 +88,7 @@
     NSMutableSet* attributes = [NSMutableSet set];
     [self traverseTilesBetweenUnrestrictedDimension:unrestrictedDimensionStart and:unrestrictedDimensionEnd iterator:^(CGPoint point) {
         NSIndexPath* indexPath = [self indexPathForPosition:point];
+        
         if(indexPath) [attributes addObject:[self layoutAttributesForItemAtIndexPath:indexPath]];
         return YES;
     }];
@@ -97,7 +97,6 @@
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
     CGRect frame = [self frameForIndexPath:indexPath];
     UICollectionViewLayoutAttributes* attributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
     attributes.frame = frame;
@@ -108,10 +107,20 @@
     return !(CGSizeEqualToSize(newBounds.size, self.collectionView.frame.size));
 }
 
+- (void)prepareForCollectionViewUpdates:(NSArray *)updateItems {
+    [super prepareForCollectionViewUpdates:updateItems];
+    
+    for(UICollectionViewUpdateItem* item in updateItems) {
+        if(item.updateAction == UICollectionUpdateActionInsert || item.updateAction == UICollectionUpdateActionMove) {
+            [self fillInBlocksToIndexPath:item.indexPathAfterUpdate];
+        }
+    }
+}
+
 - (void) invalidateLayout {
     [super invalidateLayout];
     
-    self.furthestBlockPoint = CGPointZero;
+    _furthestBlockPoint = CGPointZero;
     self.firstOpenSpace = CGPointZero;
     self.previousLayoutRect = CGRectZero;
     self.previousLayoutAttributes = nil;
@@ -133,12 +142,6 @@
         unrestrictedRow = (self.collectionView.frame.size.width / [self blockPixels].width)+1;
     
     [self fillInBlocksToUnrestrictedRow:unrestrictedRow];
-}
-
-- (UICollectionViewLayoutAttributes *)finalLayoutAttributesForDisappearingItemAtIndexPath:(NSIndexPath *)itemIndexPath {
-    UICollectionViewLayoutAttributes* attributes = [self layoutAttributesForItemAtIndexPath:itemIndexPath];
-    attributes.alpha = 0;
-    return attributes;
 }
 
 - (void) setDirection:(UICollectionViewScrollDirection)direction {
@@ -177,7 +180,29 @@
             if((vert? self.firstOpenSpace.y : self.firstOpenSpace.x) >= endRow)
                 return;
         }
+    }
+}
+
+- (void) fillInBlocksToIndexPath:(NSIndexPath*)path {
+    
+    // we'll have our data structure as if we're planning
+    // a vertical layout, then when we assign positions to
+    // the items we'll invert the axis
+    
+    int numSections = [self.collectionView numberOfSections];
+    for (int section=self.lastIndexPathPlaced.section; section<numSections; section++) {
+        int numRows = [self.collectionView numberOfItemsInSection:section];
         
+        for (int row=(!self.lastIndexPathPlaced? 0 : self.lastIndexPathPlaced.row+1); row<numRows; row++) {
+            
+            // exit when we are past the desired row
+            if(section >= path.section && row > path.row) { return; }
+                
+            NSIndexPath* indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+            
+            if([self placeBlockAtIndex:indexPath]) { self.lastIndexPathPlaced = indexPath; }
+            
+        }
     }
 }
 
@@ -326,6 +351,11 @@
 }
 
 - (CGPoint) positionForIndexPath:(NSIndexPath*)path {
+    
+    // if item does not have a position, we will make one!
+    if(!self.positionByIndexPath[@(path.section)][@(path.row)])
+        [self fillInBlocksToIndexPath:path];
+    
     return CGPointFromString(self.positionByIndexPath[@(path.section)][@(path.row)]);
 }
 
