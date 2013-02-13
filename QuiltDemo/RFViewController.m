@@ -21,7 +21,7 @@ int num = 0;
 - (void)viewDidLoad {
     
     self.numbers = [@[] mutableCopy];
-    for(; num<5; num++) { [self.numbers addObject:@(num)]; }
+    for(; num<50; num++) { [self.numbers addObject:@(num)]; }
     
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
     
@@ -37,6 +37,8 @@ int num = 0;
 }
 
 - (IBAction)remove:(id)sender {
+    if(!self.numbers.count) return;
+    
     [self.collectionView performBatchUpdates:^{
         int index = arc4random() % self.numbers.count;
         [self.numbers removeObjectAtIndex:index];

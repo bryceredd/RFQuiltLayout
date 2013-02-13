@@ -351,7 +351,7 @@
     NSMutableDictionary* innerDict = self.positionByIndexPath[@(path.section)];
     if (!innerDict) self.positionByIndexPath[@(path.section)] = [NSMutableDictionary dictionary];
     
-    self.positionByIndexPath[@(path.section)][@(path.row)] = NSStringFromCGPoint(point);
+    self.positionByIndexPath[@(path.section)][@(path.row)] = [NSValue valueWithCGPoint:point];
 }
 
 - (CGPoint) positionForIndexPath:(NSIndexPath*)path {
@@ -360,7 +360,7 @@
     if(!self.positionByIndexPath[@(path.section)][@(path.row)])
         [self fillInBlocksToIndexPath:path];
     
-    return CGPointFromString(self.positionByIndexPath[@(path.section)][@(path.row)]);
+    return [self.positionByIndexPath[@(path.section)][@(path.row)] CGPointValue];
 }
 
 
