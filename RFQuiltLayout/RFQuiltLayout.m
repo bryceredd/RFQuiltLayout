@@ -55,6 +55,7 @@
     // defaults
     self.direction = UICollectionViewScrollDirectionVertical;
     self.blockPixels = CGSizeMake(100.f, 100.f);
+    self.edgeInsets = UIEdgeInsetsZero;
 }
 
 - (CGSize)collectionViewContentSize {
@@ -97,9 +98,13 @@
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
+    UIEdgeInsets insets = UIEdgeInsetsZero;
+    if([self.delegate respondsToSelector:@selector(insetsForItemAtIndexPath:)])
+        insets = [self.delegate insetsForItemAtIndexPath:indexPath];
+    
     CGRect frame = [self frameForIndexPath:indexPath];
     UICollectionViewLayoutAttributes* attributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
-    attributes.frame = frame;
+    attributes.frame = UIEdgeInsetsInsetRect(frame, insets);
     return attributes;
 }
 
