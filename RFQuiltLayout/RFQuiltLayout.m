@@ -55,7 +55,6 @@
     // defaults
     self.direction = UICollectionViewScrollDirectionVertical;
     self.blockPixels = CGSizeMake(100.f, 100.f);
-    self.edgeInsets = UIEdgeInsetsZero;
 }
 
 - (CGSize)collectionViewContentSize {
