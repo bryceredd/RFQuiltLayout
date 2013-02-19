@@ -26,8 +26,8 @@ int num = 0;
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
     
     RFQuiltLayout* layout = (id)[self.collectionView collectionViewLayout];
-    layout.direction = UICollectionViewScrollDirectionHorizontal;
-    layout.blockPixels = CGSizeMake(120, 180);
+    layout.direction = UICollectionViewScrollDirectionVertical;
+    layout.blockPixels = CGSizeMake(60, 60);
     
     [self.collectionView reloadData];
 }
@@ -90,6 +90,8 @@ int num = 0;
     
     if (indexPath.row % 10 == 0)
         return CGSizeMake(3, 1);
+    if (indexPath.row % 11 == 0)
+        return CGSizeMake(2, 1);
     else if (indexPath.row % 7 == 0)
         return CGSizeMake(1, 3);
     else if (indexPath.row % 8 == 0)
