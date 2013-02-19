@@ -23,6 +23,6 @@
 // only use this if you don't have more than 1000ish items.
 // this will give you the correct size from the start and
 // improve scrolling speed, at the cost of time at the beginning
-@property (nonatomic) BOOL predrawEverything;
+@property (nonatomic) BOOL prelayoutEverything;
 
 @end

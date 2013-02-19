@@ -27,7 +27,7 @@ int num = 0;
     
     RFQuiltLayout* layout = (id)[self.collectionView collectionViewLayout];
     layout.direction = UICollectionViewScrollDirectionVertical;
-    layout.blockPixels = CGSizeMake(60, 60);
+    layout.blockPixels = CGSizeMake(100, 100);
     
     [self.collectionView reloadData];
 }
@@ -66,8 +66,6 @@ int num = 0;
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-    cell.layer.borderColor = [UIColor blackColor].CGColor;
-    cell.layer.borderWidth = 10.f;
     cell.backgroundColor = [self colorForNumber:self.numbers[indexPath.row]];
     
     UILabel* label = (id)[cell viewWithTag:5];
@@ -101,6 +99,10 @@ int num = 0;
     if (indexPath.row == 0) return CGSizeMake(5, 5);
     
     return CGSizeMake(1, 1);
+}
+
+- (UIEdgeInsets)insetsForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return UIEdgeInsetsMake(2, 2, 2, 2);
 }
 
 
