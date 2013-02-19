@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0239B55C168BB0F4008B8AD6 /* RFQuiltLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 0239B55B168BB0F4008B8AD6 /* RFQuiltLayout.m */; };
+		026492D616D3628600992E42 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 026492D516D3628600992E42 /* CoreGraphics.framework */; };
 		02E25B07168B74B0009CA089 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02E25B06168B74B0009CA089 /* UIKit.framework */; };
 		02E25B09168B74B0009CA089 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02E25B08168B74B0009CA089 /* Foundation.framework */; };
-		02E25B0B168B74B0009CA089 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02E25B0A168B74B0009CA089 /* CoreGraphics.framework */; };
 		02E25B11168B74B0009CA089 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 02E25B0F168B74B0009CA089 /* InfoPlist.strings */; };
 		02E25B13168B74B0009CA089 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 02E25B12168B74B0009CA089 /* main.m */; };
 		02E25B17168B74B0009CA089 /* RFAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 02E25B16168B74B0009CA089 /* RFAppDelegate.m */; };
@@ -24,10 +24,10 @@
 /* Begin PBXFileReference section */
 		0239B55A168BB0F4008B8AD6 /* RFQuiltLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RFQuiltLayout.h; path = RFQuiltLayout/RFQuiltLayout.h; sourceTree = SOURCE_ROOT; };
 		0239B55B168BB0F4008B8AD6 /* RFQuiltLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RFQuiltLayout.m; path = RFQuiltLayout/RFQuiltLayout.m; sourceTree = SOURCE_ROOT; };
+		026492D516D3628600992E42 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		02E25B02168B74B0009CA089 /* QuiltDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuiltDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02E25B06168B74B0009CA089 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		02E25B08168B74B0009CA089 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		02E25B0A168B74B0009CA089 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		02E25B0E168B74B0009CA089 /* QuiltDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "QuiltDemo-Info.plist"; sourceTree = "<group>"; };
 		02E25B10168B74B0009CA089 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		02E25B12168B74B0009CA089 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -47,9 +47,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				026492D616D3628600992E42 /* CoreGraphics.framework in Frameworks */,
 				02E25B07168B74B0009CA089 /* UIKit.framework in Frameworks */,
 				02E25B09168B74B0009CA089 /* Foundation.framework in Frameworks */,
-				02E25B0B168B74B0009CA089 /* CoreGraphics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,9 +76,9 @@
 		02E25B05168B74B0009CA089 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				026492D516D3628600992E42 /* CoreGraphics.framework */,
 				02E25B06168B74B0009CA089 /* UIKit.framework */,
 				02E25B08168B74B0009CA089 /* Foundation.framework */,
-				02E25B0A168B74B0009CA089 /* CoreGraphics.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
