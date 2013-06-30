@@ -40,7 +40,7 @@ int num = 0;
     if(!self.numbers.count) return;
     
     [self.collectionView performBatchUpdates:^{
-        int index = arc4random() % self.numbers.count;
+        int index = arc4random() % MAX(1, self.numbers.count);
         [self.numbers removeObjectAtIndex:index];
         [self.collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]]];
     } completion:nil];
