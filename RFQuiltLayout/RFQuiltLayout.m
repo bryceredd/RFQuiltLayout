@@ -55,6 +55,7 @@
     // defaults
     self.direction = UICollectionViewScrollDirectionVertical;
     self.blockPixels = CGSizeMake(100.f, 100.f);
+	self.minimumInteritemSpacing=0;
 }
 
 - (CGSize)collectionViewContentSize {
@@ -144,7 +145,10 @@
         unrestrictedRow = (self.collectionView.frame.size.height / [self blockPixels].height)+1;
     else
         unrestrictedRow = (self.collectionView.frame.size.width / [self blockPixels].width)+1;
-    
+	
+	if (self.predrawEverything) {
+		unrestrictedRow=INT32_MAX;
+	}
     [self fillInBlocksToUnrestrictedRow:unrestrictedRow];
 }
 
@@ -371,16 +375,16 @@
     
     if (isVert) {
         float initialPaddingForContraintedDimension = (self.collectionView.frame.size.width - [self restrictedDimensionBlockSize]*self.blockPixels.width)/ 2;
-        return CGRectMake(position.x*self.blockPixels.width + initialPaddingForContraintedDimension,
-                          position.y*self.blockPixels.height,
-                          elementSize.width*self.blockPixels.width,
-                          elementSize.height*self.blockPixels.height);
+        return CGRectMake(position.x*self.blockPixels.width + initialPaddingForContraintedDimension+(self.minimumInteritemSpacing/2),
+                          position.y*self.blockPixels.height+(self.minimumInteritemSpacing/2),
+                          (elementSize.width*self.blockPixels.width)-self.minimumInteritemSpacing,
+                          (elementSize.height*self.blockPixels.height)-self.minimumInteritemSpacing);
     } else {
         float initialPaddingForContraintedDimension = (self.collectionView.frame.size.height - [self restrictedDimensionBlockSize]*self.blockPixels.height)/ 2;
-        return CGRectMake(position.x*self.blockPixels.width,
-                          position.y*self.blockPixels.height + initialPaddingForContraintedDimension,
-                          elementSize.width*self.blockPixels.width,
-                          elementSize.height*self.blockPixels.height);
+        return CGRectMake(position.x*self.blockPixels.width+(self.minimumInteritemSpacing/2),
+                          position.y*self.blockPixels.height + initialPaddingForContraintedDimension+(self.minimumInteritemSpacing/2),
+                          (elementSize.width*self.blockPixels.width)-self.minimumInteritemSpacing,
+                          (elementSize.height*self.blockPixels.height)-self.minimumInteritemSpacing);
     }
 }
 
