@@ -211,7 +211,7 @@
 }
 
 - (BOOL) placeBlockAtIndex:(NSIndexPath*)indexPath {
-    CGSize blockSize = [self.delegate blockSizeForItemAtIndexPath:indexPath];
+    CGSize blockSize = [self getBlockSizeForItemAtIndexPath:indexPath];
     BOOL vert = self.direction == UICollectionViewScrollDirectionVertical;
     
     
@@ -367,7 +367,7 @@
 - (CGRect) frameForIndexPath:(NSIndexPath*)path {
     BOOL isVert = self.direction == UICollectionViewScrollDirectionVertical;
     CGPoint position = [self positionForIndexPath:path];
-    CGSize elementSize = [self.delegate blockSizeForItemAtIndexPath:path];
+    CGSize elementSize = [self getBlockSizeForItemAtIndexPath:path];
     
     if (isVert) {
         float initialPaddingForContraintedDimension = (self.collectionView.frame.size.width - [self restrictedDimensionBlockSize]*self.blockPixels.width)/ 2;
@@ -383,6 +383,18 @@
                           elementSize.height*self.blockPixels.height);
     }
 }
+
+
+//This method is prefixed with get because it may return its value indirectly
+- (CGSize)getBlockSizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGSize blockSize = CGSizeMake(1, 1);
+    if([self.delegate respondsToSelector:@selector(blockSizeForItemAtIndexPath:)])
+        blockSize = [self.delegate blockSizeForItemAtIndexPath:indexPath];
+
+    return blockSize;
+}
+
 
 // this will return the maximum width or height the quilt
 // layout can take, depending on we're growing horizontally
