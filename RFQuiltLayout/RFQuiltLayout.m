@@ -8,7 +8,6 @@
 #import "RFQuiltLayout.h"
 
 @interface RFQuiltLayout ()
-// todo put these back
 @property(nonatomic) CGPoint firstOpenSpace;
 @property(nonatomic) CGPoint furthestBlockPoint;
 
@@ -139,11 +138,13 @@
     
     BOOL isVert = self.direction == UICollectionViewScrollDirectionVertical;
     
+    CGRect scrollFrame = CGRectMake(self.collectionView.contentOffset.x, self.collectionView.contentOffset.y, self.collectionView.frame.size.width, self.collectionView.frame.size.height);
+    
     int unrestrictedRow = 0;
     if (isVert)
-        unrestrictedRow = (self.collectionView.frame.size.height / [self blockPixels].height)+1;
+        unrestrictedRow = (CGRectGetMaxY(scrollFrame) / [self blockPixels].height)+1;
     else
-        unrestrictedRow = (self.collectionView.frame.size.width / [self blockPixels].width)+1;
+        unrestrictedRow = (CGRectGetMaxX(scrollFrame) / [self blockPixels].width)+1;
     
     [self fillInBlocksToUnrestrictedRow:self.prelayoutEverything? INT_MAX : unrestrictedRow];
 }

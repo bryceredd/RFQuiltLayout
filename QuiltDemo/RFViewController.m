@@ -9,7 +9,9 @@
 #import "RFViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
-@interface RFViewController ()
+@interface RFViewController () {
+    BOOL isAnimating;
+}
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (nonatomic) NSMutableArray* numbers;
 @end
@@ -21,13 +23,14 @@ int num = 0;
 - (void)viewDidLoad {
     
     self.numbers = [@[] mutableCopy];
-    for(; num<50; num++) { [self.numbers addObject:@(num)]; }
+    for(; num<0; num++) { [self.numbers addObject:@(num)]; }
     
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
     
     RFQuiltLayout* layout = (id)[self.collectionView collectionViewLayout];
     layout.direction = UICollectionViewScrollDirectionVertical;
     layout.blockPixels = CGSizeMake(310, 255);
+    layout.prelayoutEverything = YES;
     
     [self.collectionView reloadData];
 }
@@ -39,11 +42,16 @@ int num = 0;
 - (IBAction)remove:(id)sender {
     if(!self.numbers.count) return;
     
+    if(isAnimating) return;
+    isAnimating = YES;
+    
     [self.collectionView performBatchUpdates:^{
         int index = arc4random() % MAX(1, self.numbers.count);
         [self.numbers removeObjectAtIndex:index];
         [self.collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]]];
-    } completion:nil];
+    } completion:^(BOOL done) {
+        isAnimating = NO;
+    }];
 }
 
 - (IBAction)refresh:(id)sender {
@@ -51,11 +59,16 @@ int num = 0;
 }
 
 - (IBAction)add:(id)sender {
+    if(isAnimating) return;
+    isAnimating = YES;
+
     [self.collectionView performBatchUpdates:^{
-        int index = arc4random() % self.numbers.count;
+        int index = arc4random() % MAX(self.numbers.count,1);
         [self.numbers insertObject:@(++num) atIndex:index];
         [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]]];
-    } completion:nil];
+    } completion:^(BOOL done) {
+        isAnimating = NO;
+    }];
 }
 
 - (UIColor*) colorForNumber:(NSNumber*)num {
