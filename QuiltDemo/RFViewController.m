@@ -27,7 +27,7 @@ int num = 0;
     
     RFQuiltLayout* layout = (id)[self.collectionView collectionViewLayout];
     layout.direction = UICollectionViewScrollDirectionVertical;
-    layout.blockPixels = CGSizeMake(100, 100);
+    layout.blockPixels = CGSizeMake(310, 255);
     
     [self.collectionView reloadData];
 }
@@ -44,6 +44,10 @@ int num = 0;
         [self.numbers removeObjectAtIndex:index];
         [self.collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]]];
     } completion:nil];
+}
+
+- (IBAction)refresh:(id)sender {
+    [self.collectionView reloadData];
 }
 
 - (IBAction)add:(id)sender {
@@ -69,7 +73,7 @@ int num = 0;
     cell.backgroundColor = [self colorForNumber:self.numbers[indexPath.row]];
     
     UILabel* label = (id)[cell viewWithTag:5];
-    if(!label) label = [[UILabel alloc] initWithFrame:CGRectMake(50, 50, 20, 20)];
+    if(!label) label = [[UILabel alloc] initWithFrame:CGRectMake(50, 50, 30, 20)];
     label.tag = 5;
     label.textColor = [UIColor blackColor];
     label.text = [NSString stringWithFormat:@"%@", self.numbers[indexPath.row]];
@@ -83,6 +87,8 @@ int num = 0;
 #pragma mark – RFQuiltLayoutDelegate
 
 - (CGSize) blockSizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return CGSizeMake(1.0, 1.0);
+    
     if(indexPath.row >= self.numbers.count)
         NSLog(@"Asking for index paths of non-existant cells!! %d from %d cells", indexPath.row, self.numbers.count);
     

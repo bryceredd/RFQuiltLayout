@@ -82,7 +82,7 @@
     int unrestrictedDimensionLength = (isVert? rect.size.height / self.blockPixels.height : rect.size.width / self.blockPixels.width) + 1;
     int unrestrictedDimensionEnd = unrestrictedDimensionStart + unrestrictedDimensionLength;
     
-    [self fillInBlocksToUnrestrictedRow:unrestrictedDimensionEnd];
+    [self fillInBlocksToUnrestrictedRow:self.prelayoutEverything? INT_MAX : unrestrictedDimensionEnd];
     
     // find the indexPaths between those rows
     NSMutableSet* attributes = [NSMutableSet set];
@@ -145,7 +145,7 @@
     else
         unrestrictedRow = (self.collectionView.frame.size.width / [self blockPixels].width)+1;
     
-    [self fillInBlocksToUnrestrictedRow:unrestrictedRow];
+    [self fillInBlocksToUnrestrictedRow:self.prelayoutEverything? INT_MAX : unrestrictedRow];
 }
 
 - (void) setDirection:(UICollectionViewScrollDirection)direction {
@@ -316,7 +316,6 @@
     self.indexPathByPosition = [NSMutableDictionary dictionary];
     self.positionByIndexPath = [NSMutableDictionary dictionary];
 }
-
 
 - (NSIndexPath*)indexPathForPosition:(CGPoint)point {
     BOOL isVert = self.direction == UICollectionViewScrollDirectionVertical;
