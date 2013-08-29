@@ -8,7 +8,6 @@
 #import "RFQuiltLayout.h"
 
 @interface RFQuiltLayout ()
-// todo put these back
 @property(nonatomic) CGPoint firstOpenSpace;
 @property(nonatomic) CGPoint furthestBlockPoint;
 
@@ -82,7 +81,7 @@
     int unrestrictedDimensionLength = (isVert? rect.size.height / self.blockPixels.height : rect.size.width / self.blockPixels.width) + 1;
     int unrestrictedDimensionEnd = unrestrictedDimensionStart + unrestrictedDimensionLength;
     
-    [self fillInBlocksToUnrestrictedRow:unrestrictedDimensionEnd];
+    [self fillInBlocksToUnrestrictedRow:self.prelayoutEverything? INT_MAX : unrestrictedDimensionEnd];
     
     // find the indexPaths between those rows
     NSMutableSet* attributes = [NSMutableSet set];
@@ -139,13 +138,15 @@
     
     BOOL isVert = self.direction == UICollectionViewScrollDirectionVertical;
     
+    CGRect scrollFrame = CGRectMake(self.collectionView.contentOffset.x, self.collectionView.contentOffset.y, self.collectionView.frame.size.width, self.collectionView.frame.size.height);
+    
     int unrestrictedRow = 0;
     if (isVert)
-        unrestrictedRow = (self.collectionView.frame.size.height / [self blockPixels].height)+1;
+        unrestrictedRow = (CGRectGetMaxY(scrollFrame) / [self blockPixels].height)+1;
     else
-        unrestrictedRow = (self.collectionView.frame.size.width / [self blockPixels].width)+1;
+        unrestrictedRow = (CGRectGetMaxX(scrollFrame) / [self blockPixels].width)+1;
     
-    [self fillInBlocksToUnrestrictedRow:unrestrictedRow];
+    [self fillInBlocksToUnrestrictedRow:self.prelayoutEverything? INT_MAX : unrestrictedRow];
 }
 
 - (void) setDirection:(UICollectionViewScrollDirection)direction {
@@ -316,7 +317,6 @@
     self.indexPathByPosition = [NSMutableDictionary dictionary];
     self.positionByIndexPath = [NSMutableDictionary dictionary];
 }
-
 
 - (NSIndexPath*)indexPathForPosition:(CGPoint)point {
     BOOL isVert = self.direction == UICollectionViewScrollDirectionVertical;
