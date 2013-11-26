@@ -170,11 +170,11 @@
     // a vertical layout, then when we assign positions to
     // the items we'll invert the axis
     
-    int numSections = [self.collectionView numberOfSections];
-    for (int section=self.lastIndexPathPlaced.section; section<numSections; section++) {
-        int numRows = [self.collectionView numberOfItemsInSection:section];
+    NSInteger numSections = [self.collectionView numberOfSections];
+    for (NSInteger section=self.lastIndexPathPlaced.section; section<numSections; section++) {
+        NSInteger numRows = [self.collectionView numberOfItemsInSection:section];
         
-        for (int row=(!self.lastIndexPathPlaced? 0 : self.lastIndexPathPlaced.row+1); row<numRows; row++) {
+        for (NSInteger row = (!self.lastIndexPathPlaced? 0 : self.lastIndexPathPlaced.row + 1); row<numRows; row++) {
             NSIndexPath* indexPath = [NSIndexPath indexPathForRow:row inSection:section];
             
             if([self placeBlockAtIndex:indexPath]) {
@@ -194,11 +194,11 @@
     // a vertical layout, then when we assign positions to
     // the items we'll invert the axis
     
-    int numSections = [self.collectionView numberOfSections];
-    for (int section=self.lastIndexPathPlaced.section; section<numSections; section++) {
-        int numRows = [self.collectionView numberOfItemsInSection:section];
+    NSInteger numSections = [self.collectionView numberOfSections];
+    for (NSInteger section=self.lastIndexPathPlaced.section; section<numSections; section++) {
+        NSInteger numRows = [self.collectionView numberOfItemsInSection:section];
         
-        for (int row=(!self.lastIndexPathPlaced? 0 : self.lastIndexPathPlaced.row+1); row<numRows; row++) {
+        for (NSInteger row=(!self.lastIndexPathPlaced? 0 : self.lastIndexPathPlaced.row+1); row<numRows; row++) {
             
             // exit when we are past the desired row
             if(section >= path.section && row > path.row) { return; }
