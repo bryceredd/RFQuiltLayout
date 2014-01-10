@@ -47,6 +47,11 @@
 }
 
 - (IBAction)remove:(id)sender {
+    
+    if (!self.numbers.count) {
+        return;
+    }
+    
     NSArray *visibleIndexPaths = [self.collectionView indexPathsForVisibleItems];
     NSIndexPath *toRemove = [visibleIndexPaths objectAtIndex:(arc4random() % visibleIndexPaths.count)];
     [self removeIndexPath:toRemove];
