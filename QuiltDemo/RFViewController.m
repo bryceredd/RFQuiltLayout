@@ -28,8 +28,8 @@ int num = 0;
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
     
     RFQuiltLayout* layout = (id)[self.collectionView collectionViewLayout];
-    layout.direction = UICollectionViewScrollDirectionVertical;
-    layout.blockPixels = CGSizeMake(100, 100);
+    layout.scrollDirection = UICollectionViewScrollDirectionVertical;
+    layout.itemBlockSize = CGSizeMake(100, 100);
     
     [self.collectionView reloadData];
 }
@@ -60,7 +60,7 @@ int num = 0;
 - (IBAction)add:(id)sender {
     if(isAnimating) return;
     isAnimating = YES;
-
+	
     [self.collectionView performBatchUpdates:^{
         int index = arc4random() % MAX(self.numbers.count,1);
         [self.numbers insertObject:@(++num) atIndex:index];
