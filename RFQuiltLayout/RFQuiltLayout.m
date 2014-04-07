@@ -91,20 +91,23 @@
     int unrestrictedDimensionEnd = unrestrictedDimensionStart + unrestrictedDimensionLength;
     
     [self fillInBlocksToUnrestrictedRow:self.prelayoutEverything? INT_MAX : unrestrictedDimensionEnd];
-    
-	NSMutableSet* attributes = [NSMutableSet set];
-	NSArray *indexPaths = [self indexPathsInRect:rect];
-	for(NSIndexPath *indexPath in indexPaths)
-	{
-		if(indexPath.row == 0) {
-			[attributes addObject:[self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader atIndexPath:indexPath]];
-		}
-		if(indexPath.row == ([self.collectionView numberOfItemsInSection:indexPath.section] - 1)) {
-			[attributes addObject:[self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionFooter atIndexPath:indexPath]];
-		}
-		
-		[attributes addObject:[self layoutAttributesForItemAtIndexPath:indexPath]];
-	}
+  
+    // find the indexPaths between those rows
+    NSMutableSet* attributes = [NSMutableSet set];
+    [self traverseTilesBetweenUnrestrictedDimension:unrestrictedDimensionStart and:unrestrictedDimensionEnd iterator:^(CGPoint point) {
+        NSIndexPath* indexPath = [self indexPathForPosition:point];
+        
+        if(indexPath) {
+            if(indexPath.row == 0) {
+              [attributes addObject:[self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader atIndexPath:indexPath]];
+            }
+            if(indexPath.row == ([self.collectionView numberOfItemsInSection:indexPath.section] - 1)) {
+              [attributes addObject:[self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionFooter atIndexPath:indexPath]];
+            }
+            [attributes addObject:[self layoutAttributesForItemAtIndexPath:indexPath]];
+        }
+        return YES;
+    }];
 	
     return (self.previousLayoutAttributes = [attributes allObjects]);
 }
