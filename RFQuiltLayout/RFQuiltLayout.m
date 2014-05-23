@@ -98,10 +98,10 @@
         NSIndexPath* indexPath = [self indexPathForPosition:point];
         
         if(indexPath) {
-            if(indexPath.row == 0) {
+            if(indexPath.row == 0 && self.headerReferenceSize.height > 0) {
               [attributes addObject:[self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader atIndexPath:indexPath]];
             }
-            if(indexPath.row == ([self.collectionView numberOfItemsInSection:indexPath.section] - 1)) {
+            if(indexPath.row == ([self.collectionView numberOfItemsInSection:indexPath.section] - 1) && self.footerReferenceSize.height > 0) {
               [attributes addObject:[self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionFooter atIndexPath:indexPath]];
             }
             [attributes addObject:[self layoutAttributesForItemAtIndexPath:indexPath]];
