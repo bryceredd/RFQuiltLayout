@@ -21,7 +21,17 @@
 @implementation RFViewController
 
 - (void)viewDidLoad {
+    [self datasInit];
+    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
     
+    RFQuiltLayout* layout = (id)[self.collectionView collectionViewLayout];
+    layout.direction = UICollectionViewScrollDirectionVertical;
+    layout.blockPixels = CGSizeMake(75,75);
+    
+    [self.collectionView reloadData];
+}
+- (void)datasInit {
+    num = 0;
     self.numbers = [@[] mutableCopy];
     self.numberWidths = @[].mutableCopy;
     self.numberHeights = @[].mutableCopy;
@@ -31,17 +41,8 @@
         [self.numberHeights addObject:@([self randomLength])];
     }
     
-    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
-	[self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView"];
-	[self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"footerView"];
-    
-    RFQuiltLayout* layout = (id)[self.collectionView collectionViewLayout];
-    layout.direction = UICollectionViewScrollDirectionVertical;
-    layout.blockPixels = CGSizeMake(75,75);
-    
-    [self.collectionView reloadData];
+  
 }
-
 - (void) viewDidAppear:(BOOL)animated {
     [self.collectionView reloadData];
 }
@@ -58,6 +59,7 @@
 }
 
 - (IBAction)refresh:(id)sender {
+    [self datasInit];
     [self.collectionView reloadData];
 }
 
