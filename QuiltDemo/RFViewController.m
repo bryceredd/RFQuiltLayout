@@ -23,7 +23,17 @@ int num = 0;
 @implementation RFViewController
 
 - (void)viewDidLoad {
+    [self datasInit];
+    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
     
+    RFQuiltLayout* layout = (id)[self.collectionView collectionViewLayout];
+    layout.direction = UICollectionViewScrollDirectionVertical;
+    layout.blockPixels = CGSizeMake(75,75);
+    
+    [self.collectionView reloadData];
+}
+- (void)datasInit {
+    num = 0;
     self.numbers = [@[] mutableCopy];
     self.numberWidths = @[].mutableCopy;
     self.numberHeights = @[].mutableCopy;
@@ -33,15 +43,8 @@ int num = 0;
         [self.numberHeights addObject:@([self randomLength])];
     }
     
-    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
-    
-    RFQuiltLayout* layout = (id)[self.collectionView collectionViewLayout];
-    layout.direction = UICollectionViewScrollDirectionVertical;
-    layout.blockPixels = CGSizeMake(75,75);
-    
-    [self.collectionView reloadData];
+  
 }
-
 - (void) viewDidAppear:(BOOL)animated {
     [self.collectionView reloadData];
 }
@@ -58,6 +61,7 @@ int num = 0;
 }
 
 - (IBAction)refresh:(id)sender {
+    [self datasInit];
     [self.collectionView reloadData];
 }
 
