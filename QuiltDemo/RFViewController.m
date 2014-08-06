@@ -63,6 +63,10 @@ int num = 0;
 
 - (IBAction)add:(id)sender {
     NSArray *visibleIndexPaths = [self.collectionView indexPathsForVisibleItems];
+    if (visibleIndexPaths.count == 0) {
+        [self addIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+        return;
+    }
     NSUInteger middle = (NSUInteger)floor(visibleIndexPaths.count / 2);
     NSIndexPath *toAdd = [visibleIndexPaths firstObject];[visibleIndexPaths objectAtIndex:middle];
     [self addIndexPath:toAdd];
