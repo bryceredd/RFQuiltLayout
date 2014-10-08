@@ -119,7 +119,7 @@
 {
 	NSMutableArray *indexPaths = [NSMutableArray array];
 	
-	NSInteger numberOfSections = self.lastIndexPathPlaced.section + 1;
+	NSInteger numberOfSections = [self.collectionView numberOfSections];
     for (NSInteger sectionIndex = 0; sectionIndex < numberOfSections; sectionIndex++) {
         
 		NSInteger numberOfRows = (sectionIndex == self.lastIndexPathPlaced.section ? (self.lastIndexPathPlaced.row + 1) : [self.collectionView numberOfItemsInSection:sectionIndex]);
@@ -294,7 +294,7 @@
     for (NSInteger section=self.lastIndexPathPlaced.section; section<numSections; section++) {
         NSInteger numRows = [self.collectionView numberOfItemsInSection:section];
         
-        for (NSInteger row=(!self.lastIndexPathPlaced? 0 : self.lastIndexPathPlaced.row+1); row<numRows; row++) {
+        for (NSInteger row=(!self.lastIndexPathPlaced || self.lastIndexPathPlaced.section != section ? 0 : self.lastIndexPathPlaced.row+1); row<numRows; row++) {
             
             // exit when we are past the desired row
             if(section >= path.section && row > path.row) { return; }
@@ -466,15 +466,13 @@
 	UIEdgeInsets sectionInset = [self sectionInsetForSection:indexPath.section];
     
     if (isVert) {
-        float initialPaddingForContraintedDimension = (self.collectionView.frame.size.width - [self restrictedDimensionBlockSize]*self.itemBlockSize.width)/ 2;
-        return CGRectMake(position.x*self.itemBlockSize.width + initialPaddingForContraintedDimension,
+        return CGRectMake(position.x*self.itemBlockSize.width + sectionInset.left,
                           position.y*self.itemBlockSize.height + ((indexPath.section+1) * (sectionInset.top + self.headerReferenceSize.height)) + (indexPath.section * self.footerReferenceSize.height) + (indexPath.section * sectionInset.bottom),
                           elementSize.width*self.itemBlockSize.width,
                           elementSize.height*self.itemBlockSize.height);
     } else {
-        float initialPaddingForContraintedDimension = (self.collectionView.frame.size.height - [self restrictedDimensionBlockSize]*self.itemBlockSize.height)/ 2;
         return CGRectMake(position.x*self.itemBlockSize.width + ((indexPath.section+1) * (sectionInset.left + self.headerReferenceSize.width)) + (indexPath.section * self.footerReferenceSize.width) + (indexPath.section * sectionInset.right),
-                          position.y*self.itemBlockSize.height + initialPaddingForContraintedDimension,
+                          position.y*self.itemBlockSize.height + sectionInset.top,
                           elementSize.width*self.itemBlockSize.width,
                           elementSize.height*self.itemBlockSize.height);
     }
