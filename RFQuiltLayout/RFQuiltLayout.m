@@ -59,11 +59,12 @@
 - (CGSize)collectionViewContentSize {
     
     BOOL isVert = self.direction == UICollectionViewScrollDirectionVertical;
-    
+
+    CGRect contentRect = UIEdgeInsetsInsetRect(self.collectionView.frame, self.collectionView.contentInset);
     if (isVert)
-        return CGSizeMake(self.collectionView.frame.size.width, (self.furthestBlockPoint.y+1) * self.blockPixels.height);
+        return CGSizeMake(CGRectGetWidth(contentRect), (self.furthestBlockPoint.y+1) * self.blockPixels.height);
     else
-        return CGSizeMake((self.furthestBlockPoint.x+1) * self.blockPixels.width, self.collectionView.frame.size.height);
+        return CGSizeMake((self.furthestBlockPoint.x+1) * self.blockPixels.width, CGRectGetHeight(contentRect));
 }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
@@ -369,14 +370,15 @@
     CGPoint position = [self positionForIndexPath:path];
     CGSize elementSize = [self getBlockSizeForItemAtIndexPath:path];
     
+    CGRect contentRect = UIEdgeInsetsInsetRect(self.collectionView.frame, self.collectionView.contentInset);
     if (isVert) {
-        float initialPaddingForContraintedDimension = (self.collectionView.frame.size.width - [self restrictedDimensionBlockSize]*self.blockPixels.width)/ 2;
+        float initialPaddingForContraintedDimension = (CGRectGetWidth(contentRect) - [self restrictedDimensionBlockSize]*self.blockPixels.width)/ 2;
         return CGRectMake(position.x*self.blockPixels.width + initialPaddingForContraintedDimension,
                           position.y*self.blockPixels.height,
                           elementSize.width*self.blockPixels.width,
                           elementSize.height*self.blockPixels.height);
     } else {
-        float initialPaddingForContraintedDimension = (self.collectionView.frame.size.height - [self restrictedDimensionBlockSize]*self.blockPixels.height)/ 2;
+        float initialPaddingForContraintedDimension = (CGRectGetHeight(contentRect) - [self restrictedDimensionBlockSize]*self.blockPixels.height)/ 2;
         return CGRectMake(position.x*self.blockPixels.width,
                           position.y*self.blockPixels.height + initialPaddingForContraintedDimension,
                           elementSize.width*self.blockPixels.width,
@@ -403,12 +405,13 @@
 - (int) restrictedDimensionBlockSize {
     BOOL isVert = self.direction == UICollectionViewScrollDirectionVertical;
     
-    int size = isVert? self.collectionView.frame.size.width / self.blockPixels.width : self.collectionView.frame.size.height / self.blockPixels.height;
+    CGRect contentRect = UIEdgeInsetsInsetRect(self.collectionView.frame, self.collectionView.contentInset);
+    int size = isVert? CGRectGetWidth(contentRect) / self.blockPixels.width : CGRectGetHeight(contentRect) / self.blockPixels.height;
     
     if(size == 0) {
         static BOOL didShowMessage;
         if(!didShowMessage) {
-            NSLog(@"%@: cannot fit block of size: %@ in frame %@!  Defaulting to 1", [self class], NSStringFromCGSize(self.blockPixels), NSStringFromCGRect(self.collectionView.frame));
+            NSLog(@"%@: cannot fit block of size: %@ in content rect %@!  Defaulting to 1", [self class], NSStringFromCGSize(self.blockPixels), NSStringFromCGRect(contentRect));
             didShowMessage = YES;
         }
         return 1;
