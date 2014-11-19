@@ -468,6 +468,7 @@
     CGSize elementSize = [self getBlockSizeForItemAtIndexPath:indexPath];
     UIEdgeInsets sectionInset = [self sectionInsetForSection:indexPath.section];
     
+    CGRect contentRect = UIEdgeInsetsInsetRect(self.collectionView.frame, self.collectionView.contentInset);
     if (isVert) {
         return CGRectMake(position.x*self.itemBlockSize.width,
                           position.y*self.itemBlockSize.height + ((indexPath.section+1) * (sectionInset.top + sectionInset.bottom + self.headerReferenceSize.height)) + (indexPath.section * self.footerReferenceSize.height) + (indexPath.section),
