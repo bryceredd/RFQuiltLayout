@@ -155,6 +155,7 @@
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
     UIEdgeInsets insets = [self itemInsetForIndexPath:indexPath];
     
+    
     CGRect frame = [self frameForIndexPath:indexPath];
     UICollectionViewLayoutAttributes* attributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
     attributes.frame = UIEdgeInsetsInsetRect(frame, insets);
