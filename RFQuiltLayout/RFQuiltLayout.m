@@ -98,8 +98,9 @@
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
     UIEdgeInsets insets = UIEdgeInsetsZero;
-    if([self.delegate respondsToSelector:@selector(insetsForItemAtIndexPath:)])
-        insets = [self.delegate insetsForItemAtIndexPath:indexPath];
+    if([self.delegate respondsToSelector:@selector(collectionView:layout:insetsForItemAtIndexPath:)])
+        insets = [[self delegate] collectionView:[self collectionView] layout:self insetsForItemAtIndexPath:indexPath];
+    
     
     CGRect frame = [self frameForIndexPath:indexPath];
     UICollectionViewLayoutAttributes* attributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
@@ -391,9 +392,8 @@
 - (CGSize)getBlockSizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CGSize blockSize = CGSizeMake(1, 1);
-    if([self.delegate respondsToSelector:@selector(blockSizeForItemAtIndexPath:)])
-        blockSize = [self.delegate blockSizeForItemAtIndexPath:indexPath];
-
+    if([self.delegate respondsToSelector:@selector(collectionView:layout:blockSizeForItemAtIndexPath:)])
+        blockSize = [[self delegate] collectionView:[self collectionView] layout:self blockSizeForItemAtIndexPath:indexPath];
     return blockSize;
 }
 

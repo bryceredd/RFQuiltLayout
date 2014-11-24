@@ -111,32 +111,32 @@ int num = 0;
 
 #pragma mark – RFQuiltLayoutDelegate
 
-- (CGSize) blockSizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
+
+-(CGSize) collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout blockSizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     if(indexPath.row >= self.numbers.count) {
-        NSLog(@"Asking for index paths of non-existant cells!! %d from %d cells", indexPath.row, self.numbers.count);
+        NSLog(@"Asking for index paths of non-existant cells!! %ld from %lu cells", (long)indexPath.row, (unsigned long)self.numbers.count);
     }
     
     CGFloat width = [[self.numberWidths objectAtIndex:indexPath.row] floatValue];
     CGFloat height = [[self.numberHeights objectAtIndex:indexPath.row] floatValue];
     return CGSizeMake(width, height);
     
-//    if (indexPath.row % 10 == 0)
-//        return CGSizeMake(3, 1);
-//    if (indexPath.row % 11 == 0)
-//        return CGSizeMake(2, 1);
-//    else if (indexPath.row % 7 == 0)
-//        return CGSizeMake(1, 3);
-//    else if (indexPath.row % 8 == 0)
-//        return CGSizeMake(1, 2);
-//    else if(indexPath.row % 11 == 0)
-//        return CGSizeMake(2, 2);
-//    if (indexPath.row == 0) return CGSizeMake(5, 5);
-//    
-//    return CGSizeMake(1, 1);
+    //    if (indexPath.row % 10 == 0)
+    //        return CGSizeMake(3, 1);
+    //    if (indexPath.row % 11 == 0)
+    //        return CGSizeMake(2, 1);
+    //    else if (indexPath.row % 7 == 0)
+    //        return CGSizeMake(1, 3);
+    //    else if (indexPath.row % 8 == 0)
+    //        return CGSizeMake(1, 2);
+    //    else if(indexPath.row % 11 == 0)
+    //        return CGSizeMake(2, 2);
+    //    if (indexPath.row == 0) return CGSizeMake(5, 5);
+    //    
+    //    return CGSizeMake(1, 1);
 }
 
-- (UIEdgeInsets)insetsForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetsForItemAtIndexPath:(NSIndexPath *)indexPath {
     return UIEdgeInsetsMake(2, 2, 2, 2);
 }
 
@@ -151,7 +151,7 @@ int num = 0;
     isAnimating = YES;
     
     [self.collectionView performBatchUpdates:^{
-        int index = indexPath.row;
+        NSInteger index = indexPath.row;
         [self.numbers insertObject:@(++num) atIndex:index];
         [self.numberWidths insertObject:@(1 + arc4random() % 3) atIndex:index];
         [self.numberHeights insertObject:@(1 + arc4random() % 3) atIndex:index];

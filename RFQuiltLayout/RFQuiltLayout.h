@@ -10,8 +10,8 @@
 
 @protocol RFQuiltLayoutDelegate <UICollectionViewDelegate>
 @optional
-- (CGSize) blockSizeForItemAtIndexPath:(NSIndexPath *)indexPath; // defaults to 1x1
-- (UIEdgeInsets) insetsForItemAtIndexPath:(NSIndexPath *)indexPath; // defaults to uiedgeinsetszero
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout blockSizeForItemAtIndexPath:(NSIndexPath *)indexPath; // defaults to 1x1
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetsForItemAtIndexPath:(NSIndexPath *)indexPath; // defaults to uiedgeinsetszero
 @end
 
 @interface RFQuiltLayout : UICollectionViewLayout
