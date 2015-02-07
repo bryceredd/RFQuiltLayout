@@ -103,7 +103,7 @@
     
     
     CGRect frame = [self frameForIndexPath:indexPath];
-    UICollectionViewLayoutAttributes* attributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
+    UICollectionViewLayoutAttributes* attributes = [self.class.layoutAttributesClass layoutAttributesForCellWithIndexPath:indexPath];
     attributes.frame = UIEdgeInsetsInsetRect(frame, insets);
     return attributes;
 }
