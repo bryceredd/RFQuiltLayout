@@ -58,21 +58,22 @@
 
 - (CGSize)collectionViewContentSize {
     
-	NSInteger numSections = [self.collectionView numberOfSections];
+    NSInteger numSections = [self.collectionView numberOfSections];
     BOOL isVert = self.scrollDirection == UICollectionViewScrollDirectionVertical;
-	
-	CGFloat totalSectionInsets = 0;
-	for(NSInteger sectionIndex = 0; sectionIndex < numSections; sectionIndex ++) {
-		UIEdgeInsets sectionInset = [self sectionInsetForSection:sectionIndex];
-		totalSectionInsets += (isVert ? sectionInset.top + sectionInset.bottom + self.headerReferenceSize.height + self.footerReferenceSize.height : sectionInset.left + sectionInset.right + self.headerReferenceSize.width + self.footerReferenceSize.width);
-	}
+    
+    CGFloat totalSectionInsets = 0;
+    for(NSInteger sectionIndex = 0; sectionIndex < numSections; sectionIndex ++) {
+        UIEdgeInsets sectionInset = [self sectionInsetForSection:sectionIndex];
+        totalSectionInsets += (isVert ? sectionInset.top + sectionInset.bottom + self.headerReferenceSize.height + self.footerReferenceSize.height : sectionInset.left + sectionInset.right + self.headerReferenceSize.width + self.footerReferenceSize.width);
+    }
     
     if (isVert) {
+        CGSize test = CGSizeMake(self.collectionView.frame.size.width, ((self.furthestBlockPoint.y+1) * self.itemBlockSize.height) + totalSectionInsets);
         return CGSizeMake(self.collectionView.frame.size.width, ((self.furthestBlockPoint.y+1) * self.itemBlockSize.height) + totalSectionInsets);
-	}
+    }
     else {
         return CGSizeMake(((self.furthestBlockPoint.x+1) * self.itemBlockSize.width) + totalSectionInsets, self.collectionView.frame.size.height);
-	}
+    }
 }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
@@ -91,7 +92,7 @@
     int unrestrictedDimensionEnd = unrestrictedDimensionStart + unrestrictedDimensionLength;
     
     [self fillInBlocksToUnrestrictedRow:self.prelayoutEverything? INT_MAX : unrestrictedDimensionEnd];
-  
+    
     // find the indexPaths between those rows
     NSMutableSet* attributes = [NSMutableSet set];
     [self traverseTilesBetweenUnrestrictedDimension:unrestrictedDimensionStart and:unrestrictedDimensionEnd iterator:^(CGPoint point) {
@@ -99,16 +100,16 @@
         
         if(indexPath) {
             if(indexPath.row == 0 && self.headerReferenceSize.height > 0) {
-              [attributes addObject:[self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader atIndexPath:indexPath]];
+                [attributes addObject:[self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader atIndexPath:indexPath]];
             }
             if(indexPath.row == ([self.collectionView numberOfItemsInSection:indexPath.section] - 1) && self.footerReferenceSize.height > 0) {
-              [attributes addObject:[self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionFooter atIndexPath:indexPath]];
+                [attributes addObject:[self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionFooter atIndexPath:indexPath]];
             }
             [attributes addObject:[self layoutAttributesForItemAtIndexPath:indexPath]];
         }
         return YES;
     }];
-	
+    
     return (self.previousLayoutAttributes = [attributes allObjects]);
 }
 
@@ -120,36 +121,36 @@
  */
 - (NSArray *)indexPathsInRect:(CGRect)rect
 {
-	NSMutableArray *indexPaths = [NSMutableArray array];
-	
-	NSInteger numberOfSections = [self.collectionView numberOfSections];
+    NSMutableArray *indexPaths = [NSMutableArray array];
+    
+    NSInteger numberOfSections = [self.collectionView numberOfSections];
     for (NSInteger sectionIndex = 0; sectionIndex < numberOfSections; sectionIndex++) {
         
-		NSInteger numberOfRows = (sectionIndex == self.lastIndexPathPlaced.section ? (self.lastIndexPathPlaced.row + 1) : [self.collectionView numberOfItemsInSection:sectionIndex]);
-		for (NSInteger rowIndex = 0; rowIndex < numberOfRows; rowIndex++) {
-			NSIndexPath* indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:sectionIndex];
-			if(CGRectIntersectsRect([self frameForIndexPath:indexPath], rect)) {
-				[indexPaths addObject:indexPath];
-			}
-		}
+        NSInteger numberOfRows = (sectionIndex == self.lastIndexPathPlaced.section ? (self.lastIndexPathPlaced.row + 1) : [self.collectionView numberOfItemsInSection:sectionIndex]);
+        for (NSInteger rowIndex = 0; rowIndex < numberOfRows; rowIndex++) {
+            NSIndexPath* indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:sectionIndex];
+            if(CGRectIntersectsRect([self frameForIndexPath:indexPath], rect)) {
+                [indexPaths addObject:indexPath];
+            }
+        }
     }
-	
-	return indexPaths;
+    
+    return indexPaths;
 }
 
 - (NSIndexPath *)indexPathBefore:(NSIndexPath *)indexPath {
-	if(indexPath.row == 0) {
-		if(indexPath.section != 0) {
-			NSInteger previousSection = indexPath.section - 1;
-			return [NSIndexPath indexPathForRow:[self.collectionView numberOfItemsInSection:previousSection] - 1 inSection:previousSection];
-		}
-		else {
-			return nil;
-		}
-	}
-	else {
-		return [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
-	}
+    if(indexPath.row == 0) {
+        if(indexPath.section != 0) {
+            NSInteger previousSection = indexPath.section - 1;
+            return [NSIndexPath indexPathForRow:[self.collectionView numberOfItemsInSection:previousSection] - 1 inSection:previousSection];
+        }
+        else {
+            return nil;
+        }
+    }
+    else {
+        return [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
+    }
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -163,30 +164,30 @@
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForSupplementaryViewOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     UICollectionViewLayoutAttributes* attributes = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:kind withIndexPath:indexPath];
-	UIEdgeInsets insets = [self sectionInsetForSection:indexPath.section];
+    UIEdgeInsets insets = [self sectionInsetForSection:indexPath.section];
     CGRect itemFrame = [self frameForIndexPath:indexPath];
-	
-	BOOL isVert = self.scrollDirection == UICollectionViewScrollDirectionVertical;
-	
-	if([kind isEqualToString:UICollectionElementKindSectionHeader]) {
-		if(isVert) {
-			attributes.frame = CGRectMake(insets.left, itemFrame.origin.y - self.headerReferenceSize.height, self.headerReferenceSize.width, self.headerReferenceSize.height);
-		}
-		else {
-			attributes.frame = CGRectMake(itemFrame.origin.x - self.headerReferenceSize.width, insets.top, self.headerReferenceSize.width, self.headerReferenceSize.height);
-		}
-		
-	}
-	else if([kind isEqualToString:UICollectionElementKindSectionFooter]) {
-		if(isVert) {
-			attributes.frame = CGRectMake(insets.left, itemFrame.origin.y + itemFrame.size.height, self.footerReferenceSize.width, self.footerReferenceSize.height);
-		}
-		else {
-			attributes.frame = CGRectMake(itemFrame.origin.x + itemFrame.size.width, insets.top, self.footerReferenceSize.width, self.footerReferenceSize.height);
-		}
-	}
-	
-	return attributes;
+    
+    BOOL isVert = self.scrollDirection == UICollectionViewScrollDirectionVertical;
+    
+    if([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+        if(isVert) {
+            attributes.frame = CGRectMake(insets.left, itemFrame.origin.y - self.headerReferenceSize.height, self.headerReferenceSize.width, self.headerReferenceSize.height);
+        }
+        else {
+            attributes.frame = CGRectMake(itemFrame.origin.x - self.headerReferenceSize.width, insets.top, self.headerReferenceSize.width, self.headerReferenceSize.height);
+        }
+        
+    }
+    else if([kind isEqualToString:UICollectionElementKindSectionFooter]) {
+        if(isVert) {
+            attributes.frame = CGRectMake(insets.left, itemFrame.origin.y + itemFrame.size.height, self.footerReferenceSize.width, self.footerReferenceSize.height);
+        }
+        else {
+            attributes.frame = CGRectMake(itemFrame.origin.x + itemFrame.size.width, insets.top, self.footerReferenceSize.width, self.footerReferenceSize.height);
+        }
+    }
+    
+    return attributes;
 }
 
 - (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds {
@@ -244,18 +245,18 @@
 
 - (UIEdgeInsets)itemInsetForIndexPath:(NSIndexPath *)indexPath
 {
-	if([self.delegate respondsToSelector:@selector(insetForItemAtIndexPath:)])
+    if([self.delegate respondsToSelector:@selector(insetForItemAtIndexPath:)])
         return [self.delegate insetForItemAtIndexPath:indexPath];
-	else
-		return _itemInset;
+    else
+        return _itemInset;
 }
 
 - (UIEdgeInsets)sectionInsetForSection:(NSInteger)section
 {
-	if([self.delegate respondsToSelector:@selector(insetForSectionAtIndexPath:)])
+    if([self.delegate respondsToSelector:@selector(insetForSectionAtIndexPath:)])
         return [self.delegate insetForSectionAtIndex:section];
-	else
-		return _sectionInset;
+    else
+        return _sectionInset;
 }
 
 
@@ -301,7 +302,7 @@
             
             // exit when we are past the desired row
             if(section >= path.section && row > path.row) { return; }
-			
+            
             NSIndexPath* indexPath = [NSIndexPath indexPathForRow:row inSection:section];
             
             if([self placeBlockAtIndex:indexPath]) { self.lastIndexPathPlaced = indexPath; }
@@ -466,11 +467,11 @@
     BOOL isVert = self.scrollDirection == UICollectionViewScrollDirectionVertical;
     CGPoint position = [self positionForIndexPath:indexPath];
     CGSize elementSize = [self getBlockSizeForItemAtIndexPath:indexPath];
-	UIEdgeInsets sectionInset = [self sectionInsetForSection:indexPath.section];
+    UIEdgeInsets sectionInset = [self sectionInsetForSection:indexPath.section];
     
     if (isVert) {
-        return CGRectMake(position.x*self.itemBlockSize.width + sectionInset.left,
-                          position.y*self.itemBlockSize.height + ((indexPath.section+1) * (sectionInset.top + self.headerReferenceSize.height)) + (indexPath.section * self.footerReferenceSize.height) + (indexPath.section * sectionInset.bottom),
+        return CGRectMake(position.x*self.itemBlockSize.width,
+                          position.y*self.itemBlockSize.height + ((indexPath.section+1) * (self.headerReferenceSize.height)) + (indexPath.section * self.footerReferenceSize.height) + (indexPath.section),
                           elementSize.width*self.itemBlockSize.width,
                           elementSize.height*self.itemBlockSize.height);
     } else {
@@ -488,7 +489,7 @@
     CGSize blockSize = CGSizeMake(1, 1);
     if([self.delegate respondsToSelector:@selector(blockSizeForItemAtIndexPath:)])
         blockSize = [self.delegate blockSizeForItemAtIndexPath:indexPath];
-	
+    
     return blockSize;
 }
 
@@ -500,7 +501,7 @@
 - (int) restrictedDimensionBlockSize {
     BOOL isVert = self.scrollDirection == UICollectionViewScrollDirectionVertical;
     
-    int size = isVert? (self.collectionView.frame.size.width - (self.sectionInset.right + self.sectionInset.left)) / self.itemBlockSize.width : (self.collectionView.frame.size.height - (self.sectionInset.top + self.sectionInset.bottom)) / self.itemBlockSize.height;
+    int size = isVert? self.collectionView.frame.size.width / self.itemBlockSize.width : self.collectionView.frame.size.height / self.itemBlockSize.height;
     
     if(size == 0) {
         static BOOL didShowMessage;
