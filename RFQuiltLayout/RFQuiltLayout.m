@@ -68,7 +68,6 @@
     }
     
     if (isVert) {
-        CGSize test = CGSizeMake(self.collectionView.frame.size.width, ((self.furthestBlockPoint.y+1) * self.itemBlockSize.height) + totalSectionInsets);
         return CGSizeMake(self.collectionView.frame.size.width, ((self.furthestBlockPoint.y+1) * self.itemBlockSize.height) + totalSectionInsets);
     }
     else {
@@ -171,7 +170,7 @@
     
     if([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         if(isVert) {
-            attributes.frame = CGRectMake(insets.left, itemFrame.origin.y - self.headerReferenceSize.height, self.headerReferenceSize.width, self.headerReferenceSize.height);
+            attributes.frame = CGRectMake(insets.left, itemFrame.origin.y - self.headerReferenceSize.height - (insets.top + insets.bottom) / 2, self.headerReferenceSize.width, self.headerReferenceSize.height);
         }
         else {
             attributes.frame = CGRectMake(itemFrame.origin.x - self.headerReferenceSize.width, insets.top, self.headerReferenceSize.width, self.headerReferenceSize.height);
@@ -471,7 +470,7 @@
     
     if (isVert) {
         return CGRectMake(position.x*self.itemBlockSize.width,
-                          position.y*self.itemBlockSize.height + ((indexPath.section+1) * (self.headerReferenceSize.height)) + (indexPath.section * self.footerReferenceSize.height) + (indexPath.section),
+                          position.y*self.itemBlockSize.height + ((indexPath.section+1) * (sectionInset.top + sectionInset.bottom + self.headerReferenceSize.height)) + (indexPath.section * self.footerReferenceSize.height) + (indexPath.section),
                           elementSize.width*self.itemBlockSize.width,
                           elementSize.height*self.itemBlockSize.height);
     } else {
