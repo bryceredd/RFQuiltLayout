@@ -31,6 +31,8 @@
 // remember the last indexpath placed, as to not
 // relayout the same indexpaths while scrolling
 @property(nonatomic) NSIndexPath* lastIndexPathPlaced;
+
+@property(nonatomic) NSMutableSet<NSIndexPath *>* everalbumBigBlockIndexPaths;
 @end
 
 
@@ -270,9 +272,23 @@
     // a vertical layout, then when we assign positions to
     // the items we'll invert the axis
     
+    [self.everalbumBigBlockIndexPaths removeAllObjects];
+    
     NSInteger numSections = [self.collectionView numberOfSections];
     for (NSInteger section=self.lastIndexPathPlaced.section; section<numSections; section++) {
         NSInteger numRows = [self.collectionView numberOfItemsInSection:section];
+        
+        if (self.useEveralbumLayout) {
+            NSInteger bigIndex = 0;
+            NSInteger i = 0;
+            while (bigIndex < numRows && i < numRows) {
+                bigIndex = 0.5 * ((12 * i) - pow(-1, i) - 11);
+                if (bigIndex >= 0) {
+                    [self.everalbumBigBlockIndexPaths addObject:[NSIndexPath indexPathForItem:bigIndex inSection:section]];
+                }
+                i++;
+            }
+        }
         
         for (NSInteger row = (!self.lastIndexPathPlaced || self.lastIndexPathPlaced.section != section ? 0 : self.lastIndexPathPlaced.row + 1); row<numRows; row++) {
             NSIndexPath* indexPath = [NSIndexPath indexPathForRow:row inSection:section];
@@ -483,11 +499,33 @@
     }
 }
 
+- (void)setUseEveralbumLayout:(BOOL)useEveralbumLayout {
+    _useEveralbumLayout = useEveralbumLayout;
+    
+    if (useEveralbumLayout && UIEdgeInsetsEqualToEdgeInsets(_itemInset, UIEdgeInsetsZero)) {
+        _itemInset = useEveralbumLayout ? UIEdgeInsetsMake(0.5, 0.5, 0.5, 0.5) : UIEdgeInsetsZero;
+    }
+}
+
+- (NSMutableSet *)everalbumBigBlockIndexPaths {
+    if (!_everalbumBigBlockIndexPaths) {
+        _everalbumBigBlockIndexPaths = [NSMutableSet set];
+    }
+    return _everalbumBigBlockIndexPaths;
+}
+
 
 //This method is prefixed with get because it may return its value indirectly
 - (CGSize)getBlockSizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGSize blockSize = CGSizeMake(1, 1);
+    CGSize blockSize;
+    
+    if (self.useEveralbumLayout && [self.everalbumBigBlockIndexPaths containsObject:indexPath]) {
+        blockSize = CGSizeMake(2, 2);
+    } else {
+        blockSize = CGSizeMake(1, 1);
+    }
+    
     if([self.delegate respondsToSelector:@selector(blockSizeForItemAtIndexPath:)])
         blockSize = [self.delegate blockSizeForItemAtIndexPath:indexPath];
     

@@ -31,10 +31,14 @@
 @property (nonatomic) UICollectionViewScrollDirection scrollDirection; // defaults to vertical
 @property (nonatomic) CGSize headerReferenceSize; // defaults to CGSizeZero
 @property (nonatomic) CGSize footerReferenceSize; // defaults to CGSizeZero
+@property(nonatomic) BOOL useEveralbumLayout;
 
 // only use this if you don't have more than 1000ish items.
 // this will give you the correct size from the start and
 // improve scrolling speed, at the cost of time at the beginning
 @property (nonatomic) BOOL prelayoutEverything;
+
+// Making this public so we can get the default value (useful in the case of using the `everalbumLayout`
+- (CGSize)getBlockSizeForItemAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
