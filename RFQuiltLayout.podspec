@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.summary  = 'RFQuiltLayout is a subclass of UICollectionViewLayout that positions various sized cells like a maison laying bricks.'
   s.homepage = 'https://github.com/bryceredd/RFQuiltLayout'
   s.author   = { 'bryce' => 'bryce@i.tv' }
-  s.source   = { :git => 'https://github.com/ppeelen/RFQuiltLayout.git', :tag => '1.1.1' }
+  s.source   = { :git => 'https://github.com/bryceredd/RFQuiltLayout.git', :tag => '1.1.1' }
   s.description = 'Lays out cells with various widths and heights on the page.  The cells are positioned in a patch-work layout so each fits next to the other, leaving no extra spaces when possible'
   s.source_files = 'RFQuiltLayout'
   s.ios.deployment_target = '6.0'
