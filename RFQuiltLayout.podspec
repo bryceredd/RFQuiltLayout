@@ -8,6 +8,7 @@ Pod::Spec.new do |s|
   s.source   = { :git => 'https://github.com/bryceredd/RFQuiltLayout.git', :tag => '1.1.1' }
   s.description = 'Lays out cells with various widths and heights on the page.  The cells are positioned in a patch-work layout so each fits next to the other, leaving no extra spaces when possible'
   s.source_files = 'RFQuiltLayout'
-  s.platform = :ios, '6.0'
+  s.ios.deployment_target = '6.0'
+  s.tvos.deployment_target = '9.0'
   s.requires_arc = true
 end
