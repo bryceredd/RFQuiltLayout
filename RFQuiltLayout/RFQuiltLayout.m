@@ -484,12 +484,17 @@
     CGPoint position = [self positionForIndexPath:indexPath];
     CGSize elementSize = [self getBlockSizeForItemAtIndexPath:indexPath];
     UIEdgeInsets sectionInset = [self sectionInsetForSection:indexPath.section];
-    
+
+    NSUInteger numColumns = self.collectionViewContentSize.width / self.itemBlockSize.width;
+    BOOL isBigBlock = [self.everalbumBigBlockIndexPaths containsObject:indexPath];
+    BOOL isLeftEdge = position.x == 0;
+    BOOL isRightEdge = position.x == (numColumns - 1) || (position.x == (numColumns - 2) && isBigBlock);
+
     CGRect contentRect = UIEdgeInsetsInsetRect(self.collectionView.frame, self.collectionView.contentInset);
     if (isVert) {
-        return CGRectMake(position.x*self.itemBlockSize.width,
+        return CGRectMake(position.x*self.itemBlockSize.width + ((self.useEveralbumLayout && isLeftEdge) ? -0.5 : 0.0),
                           position.y*self.itemBlockSize.height + ((indexPath.section+1) * (sectionInset.top + sectionInset.bottom + self.headerReferenceSize.height)) + (indexPath.section * self.footerReferenceSize.height) + (indexPath.section),
-                          elementSize.width*self.itemBlockSize.width,
+                          elementSize.width*self.itemBlockSize.width + ((self.useEveralbumLayout && (isLeftEdge || isRightEdge)) ? 0.5 : 0.0),
                           elementSize.height*self.itemBlockSize.height);
     } else {
         return CGRectMake(position.x*self.itemBlockSize.width + ((indexPath.section+1) * (sectionInset.left + self.headerReferenceSize.width)) + (indexPath.section * self.footerReferenceSize.width) + (indexPath.section * sectionInset.right),
