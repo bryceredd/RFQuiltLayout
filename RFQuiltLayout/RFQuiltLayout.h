@@ -19,6 +19,9 @@
  Use the sectionInset property instead.
  */
 - (UIEdgeInsets)insetForSectionAtIndex:(NSInteger)section; // defaults to uiedgeinsetszero
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section;
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section;
 @end
 
 
@@ -29,8 +32,6 @@
 @property (nonatomic) UIEdgeInsets itemInset; // effective only if delegate is not implemented
 @property (nonatomic) UIEdgeInsets sectionInset; // effective only if delegate is not implemented
 @property (nonatomic) UICollectionViewScrollDirection scrollDirection; // defaults to vertical
-@property (nonatomic) CGSize headerReferenceSize; // defaults to CGSizeZero
-@property (nonatomic) CGSize footerReferenceSize; // defaults to CGSizeZero
 @property(nonatomic) BOOL useEveralbumLayout;
 
 // only use this if you don't have more than 1000ish items.
