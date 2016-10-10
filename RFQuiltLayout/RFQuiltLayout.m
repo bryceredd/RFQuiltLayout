@@ -394,6 +394,17 @@
     CGSize blockSize = CGSizeMake(1, 1);
     if([self.delegate respondsToSelector:@selector(collectionView:layout:blockSizeForItemAtIndexPath:)])
         blockSize = [[self delegate] collectionView:[self collectionView] layout:self blockSizeForItemAtIndexPath:indexPath];
+        
+    if (blockSize.width < 0) {
+        CGFloat width = ABS(blockSize.width);
+        blockSize.width = width / self.blockPixels.width;
+    }
+    
+    if (blockSize.height < 0) {
+        CGFloat height = ABS(blockSize.height);
+        blockSize.height = height / self.blockPixels.height;
+    }
+    
     return blockSize;
 }
 
