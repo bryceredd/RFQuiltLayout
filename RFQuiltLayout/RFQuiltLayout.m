@@ -255,7 +255,7 @@
 
 - (UIEdgeInsets)sectionInsetForSection:(NSInteger)section
 {
-    if([self.delegate respondsToSelector:@selector(insetForSectionAtIndexPath:)])
+    if([self.delegate respondsToSelector:@selector(insetForSectionAtIndex:)])
         return [self.delegate insetForSectionAtIndex:section];
     else
         return _sectionInset;
@@ -492,7 +492,7 @@
 
     CGRect contentRect = UIEdgeInsetsInsetRect(self.collectionView.frame, self.collectionView.contentInset);
     if (isVert) {
-        return CGRectMake(position.x*self.itemBlockSize.width + ((self.useEveralbumLayout && isLeftEdge) ? -0.5 : 0.0),
+        return CGRectMake(position.x*self.itemBlockSize.width + ((self.useEveralbumLayout && isLeftEdge) ? -0.5 : sectionInset.left),
                           position.y*self.itemBlockSize.height + ((indexPath.section+1) * (sectionInset.top + sectionInset.bottom + [self headerSizeForSection:indexPath.section].height)) + (indexPath.section * [self footerSizeForSection:indexPath.section].height) + (indexPath.section),
                           elementSize.width*self.itemBlockSize.width + ((self.useEveralbumLayout && (isLeftEdge || isRightEdge)) ? 0.5 : 0.0),
                           elementSize.height*self.itemBlockSize.height);
