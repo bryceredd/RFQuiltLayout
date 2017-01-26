@@ -89,7 +89,7 @@
     BOOL isVert = self.scrollDirection == UICollectionViewScrollDirectionVertical;
     
     int unrestrictedDimensionStart = (isVert? rect.origin.y / self.itemBlockSize.height : rect.origin.x / self.itemBlockSize.width) - 1;
-    int unrestrictedDimensionLength = (isVert? rect.size.height / self.itemBlockSize.height : rect.size.width / self.itemBlockSize.width) + 1;
+    int unrestrictedDimensionLength = (isVert? rect.size.height / self.itemBlockSize.height : rect.size.width / self.itemBlockSize.width) + 3;
     int unrestrictedDimensionEnd = unrestrictedDimensionStart + unrestrictedDimensionLength;
     
     [self fillInBlocksToUnrestrictedRow:self.prelayoutEverything? INT_MAX : unrestrictedDimensionEnd];
