@@ -492,9 +492,9 @@
 
     CGRect contentRect = UIEdgeInsetsInsetRect(self.collectionView.frame, self.collectionView.contentInset);
     if (isVert) {
-        return CGRectMake(position.x*self.itemBlockSize.width + ((self.useEveralbumLayout && isLeftEdge) ? -0.5 : sectionInset.left),
+        return CGRectMake(position.x*self.itemBlockSize.width + ((self.useEveralbumLayout && isLeftEdge) ? -1.5 : sectionInset.left),
                           position.y*self.itemBlockSize.height + ((indexPath.section+1) * (sectionInset.top + sectionInset.bottom + [self headerSizeForSection:indexPath.section].height)) + (indexPath.section * [self footerSizeForSection:indexPath.section].height) + (indexPath.section),
-                          elementSize.width*self.itemBlockSize.width + ((self.useEveralbumLayout && (isLeftEdge || isRightEdge)) ? 0.5 : 0.0),
+                          elementSize.width*self.itemBlockSize.width + ((self.useEveralbumLayout && (isLeftEdge || isRightEdge)) ? 1.5 : 0.0),
                           elementSize.height*self.itemBlockSize.height);
     } else {
         return CGRectMake(position.x*self.itemBlockSize.width + ((indexPath.section+1) * (sectionInset.left + [self headerSizeForSection:indexPath.section].width)) + (indexPath.section * [self footerSizeForSection:indexPath.section].width) + (indexPath.section * sectionInset.right),
@@ -508,7 +508,7 @@
     _useEveralbumLayout = useEveralbumLayout;
     
     if (useEveralbumLayout && UIEdgeInsetsEqualToEdgeInsets(_itemInset, UIEdgeInsetsZero)) {
-        _itemInset = useEveralbumLayout ? UIEdgeInsetsMake(0.5, 0.5, 0.5, 0.5) : UIEdgeInsetsZero;
+        _itemInset = useEveralbumLayout ? UIEdgeInsetsMake(1.5, 1.5, 1.5, 1.5) : UIEdgeInsetsZero;
     }
 }
 
