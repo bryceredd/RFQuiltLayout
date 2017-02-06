@@ -18,8 +18,6 @@
 @property (nonatomic) NSMutableArray* numberHeights;
 @end
 
-int num = 0;
-
 @implementation RFViewController
 
 - (void)viewDidLoad {
@@ -76,7 +74,7 @@ int num = 0;
     [self addIndexPath:toAdd];
 }
 
-- (UIColor*) colorForNumber:(NSNumber*)num {
+- (UIColor*)colorForNumber:(NSNumber*)num {
     return [UIColor colorWithHue:((19 * num.intValue) % 255)/255.f saturation:1.f brightness:1.f alpha:1.f];
 }
 
@@ -89,13 +87,17 @@ int num = 0;
 
 #pragma mark - UICollectionView Datasource
 
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+	return [self.sections count];
+}
+
 - (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section {
-    return self.numbers.count;
+	return [[self.sections objectAtIndex:section] count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-    cell.backgroundColor = [self colorForNumber:self.numbers[indexPath.row]];
     
     UILabel* label = (id)[cell viewWithTag:5];
     if(!label) label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 30, 20)];
@@ -106,6 +108,25 @@ int num = 0;
     [cell addSubview:label];
     
     return cell;
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+	UICollectionReusableView *view = nil;
+    if ([kind isEqualToString:UICollectionElementKindSectionHeader])
+	{
+        UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerView" forIndexPath:indexPath];
+		headerView.backgroundColor = [UIColor redColor];
+        view = headerView;
+    }
+	else if ([kind isEqualToString:UICollectionElementKindSectionFooter])
+	{
+        UICollectionReusableView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"footerView" forIndexPath:indexPath];
+		footerView.backgroundColor = [UIColor blueColor];
+        view = footerView;
+    }
+	
+    return view;
 }
 
 

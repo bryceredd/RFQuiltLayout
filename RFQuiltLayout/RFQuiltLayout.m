@@ -31,6 +31,8 @@
 // remember the last indexpath placed, as to not
 // relayout the same indexpaths while scrolling
 @property(nonatomic) NSIndexPath* lastIndexPathPlaced;
+
+@property(nonatomic) NSMutableSet<NSIndexPath *>* everalbumBigBlockIndexPaths;
 @end
 
 
@@ -52,19 +54,27 @@
 
 - (void) initialize {
     // defaults
-    self.direction = UICollectionViewScrollDirectionVertical;
-    self.blockPixels = CGSizeMake(100.f, 100.f);
+    self.scrollDirection = UICollectionViewScrollDirectionVertical;
+    self.itemBlockSize = CGSizeMake(100.f, 100.f);
 }
 
 - (CGSize)collectionViewContentSize {
     
-    BOOL isVert = self.direction == UICollectionViewScrollDirectionVertical;
-
-    CGRect contentRect = UIEdgeInsetsInsetRect(self.collectionView.frame, self.collectionView.contentInset);
-    if (isVert)
-        return CGSizeMake(CGRectGetWidth(contentRect), (self.furthestBlockPoint.y+1) * self.blockPixels.height);
-    else
-        return CGSizeMake((self.furthestBlockPoint.x+1) * self.blockPixels.width, CGRectGetHeight(contentRect));
+    NSInteger numSections = [self.collectionView numberOfSections];
+    BOOL isVert = self.scrollDirection == UICollectionViewScrollDirectionVertical;
+    
+    CGFloat totalSectionInsets = 0;
+    for(NSInteger sectionIndex = 0; sectionIndex < numSections; sectionIndex ++) {
+        UIEdgeInsets sectionInset = [self sectionInsetForSection:sectionIndex];
+        totalSectionInsets += (isVert ? sectionInset.top + sectionInset.bottom + [self headerSizeForSection:sectionIndex].height + [self footerSizeForSection:sectionIndex].height : sectionInset.left + sectionInset.right + [self headerSizeForSection:sectionIndex].width + [self footerSizeForSection:sectionIndex].width);
+    }
+    
+    if (isVert) {
+        return CGSizeMake(self.collectionView.frame.size.width, ((self.furthestBlockPoint.y+1) * self.itemBlockSize.height) + totalSectionInsets);
+    }
+    else {
+        return CGSizeMake(((self.furthestBlockPoint.x+1) * self.itemBlockSize.width) + totalSectionInsets, self.collectionView.frame.size.height);
+    }
 }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
@@ -76,10 +86,10 @@
     }
     self.previousLayoutRect = rect;
     
-    BOOL isVert = self.direction == UICollectionViewScrollDirectionVertical;
+    BOOL isVert = self.scrollDirection == UICollectionViewScrollDirectionVertical;
     
-    int unrestrictedDimensionStart = isVert? rect.origin.y / self.blockPixels.height : rect.origin.x / self.blockPixels.width;
-    int unrestrictedDimensionLength = (isVert? rect.size.height / self.blockPixels.height : rect.size.width / self.blockPixels.width) + 1;
+    int unrestrictedDimensionStart = (isVert? rect.origin.y / self.itemBlockSize.height : rect.origin.x / self.itemBlockSize.width) - 1;
+    int unrestrictedDimensionLength = (isVert? rect.size.height / self.itemBlockSize.height : rect.size.width / self.itemBlockSize.width) + 3;
     int unrestrictedDimensionEnd = unrestrictedDimensionStart + unrestrictedDimensionLength;
     
     [self fillInBlocksToUnrestrictedRow:self.prelayoutEverything? INT_MAX : unrestrictedDimensionEnd];
@@ -89,22 +99,96 @@
     [self traverseTilesBetweenUnrestrictedDimension:unrestrictedDimensionStart and:unrestrictedDimensionEnd iterator:^(CGPoint point) {
         NSIndexPath* indexPath = [self indexPathForPosition:point];
         
-        if(indexPath) [attributes addObject:[self layoutAttributesForItemAtIndexPath:indexPath]];
+        if(indexPath) {
+            if(indexPath.row == 0 && [self headerSizeForSection:indexPath.section].height > 0) {
+                [attributes addObject:[self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader atIndexPath:indexPath]];
+            }
+            if(indexPath.row == ([self.collectionView numberOfItemsInSection:indexPath.section] - 1) && [self footerSizeForSection:indexPath.section].height > 0) {
+                [attributes addObject:[self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionFooter atIndexPath:indexPath]];
+            }
+            [attributes addObject:[self layoutAttributesForItemAtIndexPath:indexPath]];
+        }
         return YES;
     }];
     
     return (self.previousLayoutAttributes = [attributes allObjects]);
 }
 
+
+/*
+ This method's implementation is really not efficient for large data sets but
+ will do the job for most use cases. Implemented this way to keep the layout calculations
+ methodology intact and to get the highest effort-reward ratio.
+ */
+- (NSArray *)indexPathsInRect:(CGRect)rect
+{
+    NSMutableArray *indexPaths = [NSMutableArray array];
+    
+    NSInteger numberOfSections = [self.collectionView numberOfSections];
+    for (NSInteger sectionIndex = 0; sectionIndex < numberOfSections; sectionIndex++) {
+        
+        NSInteger numberOfRows = (sectionIndex == self.lastIndexPathPlaced.section ? (self.lastIndexPathPlaced.row + 1) : [self.collectionView numberOfItemsInSection:sectionIndex]);
+        for (NSInteger rowIndex = 0; rowIndex < numberOfRows; rowIndex++) {
+            NSIndexPath* indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:sectionIndex];
+            if(CGRectIntersectsRect([self frameForIndexPath:indexPath], rect)) {
+                [indexPaths addObject:indexPath];
+            }
+        }
+    }
+    
+    return indexPaths;
+}
+
+- (NSIndexPath *)indexPathBefore:(NSIndexPath *)indexPath {
+    if(indexPath.row == 0) {
+        if(indexPath.section != 0) {
+            NSInteger previousSection = indexPath.section - 1;
+            return [NSIndexPath indexPathForRow:[self.collectionView numberOfItemsInSection:previousSection] - 1 inSection:previousSection];
+        }
+        else {
+            return nil;
+        }
+    }
+    else {
+        return [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
+    }
+}
+
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
-    UIEdgeInsets insets = UIEdgeInsetsZero;
-    if([self.delegate respondsToSelector:@selector(collectionView:layout:insetsForItemAtIndexPath:)])
-        insets = [[self delegate] collectionView:[self collectionView] layout:self insetsForItemAtIndexPath:indexPath];
+    UIEdgeInsets insets = [self itemInsetForIndexPath:indexPath];
     
     
     CGRect frame = [self frameForIndexPath:indexPath];
     UICollectionViewLayoutAttributes* attributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
     attributes.frame = UIEdgeInsetsInsetRect(frame, insets);
+    return attributes;
+}
+
+- (UICollectionViewLayoutAttributes *)layoutAttributesForSupplementaryViewOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    UICollectionViewLayoutAttributes* attributes = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:kind withIndexPath:indexPath];
+    UIEdgeInsets insets = [self sectionInsetForSection:indexPath.section];
+    CGRect itemFrame = [self frameForIndexPath:indexPath];
+    
+    BOOL isVert = self.scrollDirection == UICollectionViewScrollDirectionVertical;
+    
+    if([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+        if(isVert) {
+            attributes.frame = CGRectMake(insets.left, itemFrame.origin.y - [self headerSizeForSection:indexPath.section].height - (insets.top + insets.bottom) / 2, [self headerSizeForSection:indexPath.section].width, [self headerSizeForSection:indexPath.section].height);
+        }
+        else {
+            attributes.frame = CGRectMake(itemFrame.origin.x - [self headerSizeForSection:indexPath.section].width, insets.top, [self headerSizeForSection:indexPath.section].width, [self headerSizeForSection:indexPath.section].height);
+        }
+        
+    }
+    else if([kind isEqualToString:UICollectionElementKindSectionFooter]) {
+        if(isVert) {
+            attributes.frame = CGRectMake(insets.left, itemFrame.origin.y + itemFrame.size.height, [self footerSizeForSection:indexPath.section].width, [self footerSizeForSection:indexPath.section].height);
+        }
+        else {
+            attributes.frame = CGRectMake(itemFrame.origin.x + itemFrame.size.width, insets.top, [self footerSizeForSection:indexPath.section].width, [self footerSizeForSection:indexPath.section].height);
+        }
+    }
+    
     return attributes;
 }
 
@@ -138,27 +222,43 @@
     
     if (!self.delegate) return;
     
-    BOOL isVert = self.direction == UICollectionViewScrollDirectionVertical;
+    BOOL isVert = self.scrollDirection == UICollectionViewScrollDirectionVertical;
     
     CGRect scrollFrame = CGRectMake(self.collectionView.contentOffset.x, self.collectionView.contentOffset.y, self.collectionView.frame.size.width, self.collectionView.frame.size.height);
     
     int unrestrictedRow = 0;
     if (isVert)
-        unrestrictedRow = (CGRectGetMaxY(scrollFrame) / [self blockPixels].height)+1;
+        unrestrictedRow = (CGRectGetMaxY(scrollFrame) / self.itemBlockSize.height)+1;
     else
-        unrestrictedRow = (CGRectGetMaxX(scrollFrame) / [self blockPixels].width)+1;
+        unrestrictedRow = (CGRectGetMaxX(scrollFrame) / self.itemBlockSize.width)+1;
     
     [self fillInBlocksToUnrestrictedRow:self.prelayoutEverything? INT_MAX : unrestrictedRow];
 }
 
-- (void) setDirection:(UICollectionViewScrollDirection)direction {
-    _direction = direction;
+- (void) setScrollDirection:(UICollectionViewScrollDirection)direction {
+    _scrollDirection = direction;
     [self invalidateLayout];
 }
 
-- (void) setBlockPixels:(CGSize)size {
-    _blockPixels = size;
+- (void) setItemBlockSize:(CGSize)size {
+    _itemBlockSize = size;
     [self invalidateLayout];
+}
+
+- (UIEdgeInsets)itemInsetForIndexPath:(NSIndexPath *)indexPath
+{
+    if([self.delegate respondsToSelector:@selector(insetForItemAtIndexPath:)])
+        return [self.delegate insetForItemAtIndexPath:indexPath];
+    else
+        return _itemInset;
+}
+
+- (UIEdgeInsets)sectionInsetForSection:(NSInteger)section
+{
+    if([self.delegate respondsToSelector:@selector(insetForSectionAtIndex:)])
+        return [self.delegate insetForSectionAtIndex:section];
+    else
+        return _sectionInset;
 }
 
 
@@ -166,17 +266,31 @@
 
 - (void) fillInBlocksToUnrestrictedRow:(int)endRow {
     
-    BOOL vert = self.direction == UICollectionViewScrollDirectionVertical;
+    BOOL vert = self.scrollDirection == UICollectionViewScrollDirectionVertical;
     
     // we'll have our data structure as if we're planning
     // a vertical layout, then when we assign positions to
     // the items we'll invert the axis
     
+    [self.everalbumBigBlockIndexPaths removeAllObjects];
+    
     NSInteger numSections = [self.collectionView numberOfSections];
     for (NSInteger section=self.lastIndexPathPlaced.section; section<numSections; section++) {
         NSInteger numRows = [self.collectionView numberOfItemsInSection:section];
         
-        for (NSInteger row = (!self.lastIndexPathPlaced? 0 : self.lastIndexPathPlaced.row + 1); row<numRows; row++) {
+        if (self.useEveralbumLayout) {
+            NSInteger bigIndex = 0;
+            NSInteger i = 0;
+            while (bigIndex < numRows && i < numRows) {
+                bigIndex = 0.5 * ((12 * i) - pow(-1, i) - 11);
+                if (bigIndex >= 0) {
+                    [self.everalbumBigBlockIndexPaths addObject:[NSIndexPath indexPathForItem:bigIndex inSection:section]];
+                }
+                i++;
+            }
+        }
+        
+        for (NSInteger row = (!self.lastIndexPathPlaced || self.lastIndexPathPlaced.section != section ? 0 : self.lastIndexPathPlaced.row + 1); row<numRows; row++) {
             NSIndexPath* indexPath = [NSIndexPath indexPathForRow:row inSection:section];
             
             if([self placeBlockAtIndex:indexPath]) {
@@ -200,11 +314,11 @@
     for (NSInteger section=self.lastIndexPathPlaced.section; section<numSections; section++) {
         NSInteger numRows = [self.collectionView numberOfItemsInSection:section];
         
-        for (NSInteger row=(!self.lastIndexPathPlaced? 0 : self.lastIndexPathPlaced.row+1); row<numRows; row++) {
+        for (NSInteger row=(!self.lastIndexPathPlaced || self.lastIndexPathPlaced.section != section ? 0 : self.lastIndexPathPlaced.row+1); row<numRows; row++) {
             
             // exit when we are past the desired row
             if(section >= path.section && row > path.row) { return; }
-                
+            
             NSIndexPath* indexPath = [NSIndexPath indexPathForRow:row inSection:section];
             
             if([self placeBlockAtIndex:indexPath]) { self.lastIndexPathPlaced = indexPath; }
@@ -215,7 +329,7 @@
 
 - (BOOL) placeBlockAtIndex:(NSIndexPath*)indexPath {
     CGSize blockSize = [self getBlockSizeForItemAtIndexPath:indexPath];
-    BOOL vert = self.direction == UICollectionViewScrollDirectionVertical;
+    BOOL vert = self.scrollDirection == UICollectionViewScrollDirectionVertical;
     
     
     return ![self traverseOpenTiles:^(CGPoint blockOrigin) {
@@ -246,7 +360,6 @@
         
         [self traverseTilesForPoint:blockOrigin withSize:blockSize iterator:^(CGPoint point) {
             [self setPosition:point forIndexPath:indexPath];
-            
             self.furthestBlockPoint = point;
             
             return YES;
@@ -259,7 +372,7 @@
 // returning no in the callback will
 // terminate the iterations early
 - (BOOL) traverseTilesBetweenUnrestrictedDimension:(int)begin and:(int)end iterator:(BOOL(^)(CGPoint))block {
-    BOOL isVert = self.direction == UICollectionViewScrollDirectionVertical;
+    BOOL isVert = self.scrollDirection == UICollectionViewScrollDirectionVertical;
     
     // the double ;; is deliberate, the unrestricted dimension should iterate indefinitely
     for(int unrestrictedDimension = begin; unrestrictedDimension<end; unrestrictedDimension++) {
@@ -290,7 +403,7 @@
 // terminate the iterations early
 - (BOOL) traverseOpenTiles:(BOOL(^)(CGPoint))block {
     BOOL allTakenBefore = YES;
-    BOOL isVert = self.direction == UICollectionViewScrollDirectionVertical;
+    BOOL isVert = self.scrollDirection == UICollectionViewScrollDirectionVertical;
     
     // the double ;; is deliberate, the unrestricted dimension should iterate indefinitely
     for(int unrestrictedDimension = (isVert? self.firstOpenSpace.y : self.firstOpenSpace.x);; unrestrictedDimension++) {
@@ -321,7 +434,7 @@
 }
 
 - (NSIndexPath*)indexPathForPosition:(CGPoint)point {
-    BOOL isVert = self.direction == UICollectionViewScrollDirectionVertical;
+    BOOL isVert = self.scrollDirection == UICollectionViewScrollDirectionVertical;
     
     // to avoid creating unbounded nsmutabledictionaries we should
     // have the innerdict be the unrestricted dimension
@@ -333,7 +446,7 @@
 }
 
 - (void) setPosition:(CGPoint)point forIndexPath:(NSIndexPath*)indexPath {
-    BOOL isVert = self.direction == UICollectionViewScrollDirectionVertical;
+    BOOL isVert = self.scrollDirection == UICollectionViewScrollDirectionVertical;
     
     // to avoid creating unbounded nsmutabledictionaries we should
     // have the innerdict be the unrestricted dimension
@@ -356,44 +469,71 @@
     self.positionByIndexPath[@(path.section)][@(path.row)] = [NSValue valueWithCGPoint:point];
 }
 
-- (CGPoint) positionForIndexPath:(NSIndexPath*)path {
+- (CGPoint) positionForIndexPath:(NSIndexPath*)indexPath {
     
     // if item does not have a position, we will make one!
-    if(!self.positionByIndexPath[@(path.section)][@(path.row)])
-        [self fillInBlocksToIndexPath:path];
+    if(!self.positionByIndexPath[@(indexPath.section)][@(indexPath.row)])
+        [self fillInBlocksToIndexPath:indexPath];
     
-    return [self.positionByIndexPath[@(path.section)][@(path.row)] CGPointValue];
+    return [self.positionByIndexPath[@(indexPath.section)][@(indexPath.row)] CGPointValue];
 }
 
 
-- (CGRect) frameForIndexPath:(NSIndexPath*)path {
-    BOOL isVert = self.direction == UICollectionViewScrollDirectionVertical;
-    CGPoint position = [self positionForIndexPath:path];
-    CGSize elementSize = [self getBlockSizeForItemAtIndexPath:path];
-    
+- (CGRect) frameForIndexPath:(NSIndexPath*)indexPath {
+    BOOL isVert = self.scrollDirection == UICollectionViewScrollDirectionVertical;
+    CGPoint position = [self positionForIndexPath:indexPath];
+    CGSize elementSize = [self getBlockSizeForItemAtIndexPath:indexPath];
+    UIEdgeInsets sectionInset = [self sectionInsetForSection:indexPath.section];
+
+    NSUInteger numColumns = self.collectionViewContentSize.width / self.itemBlockSize.width;
+    BOOL isBigBlock = [self.everalbumBigBlockIndexPaths containsObject:indexPath];
+    BOOL isLeftEdge = position.x == 0;
+    BOOL isRightEdge = position.x == (numColumns - 1) || (position.x == (numColumns - 2) && isBigBlock);
+
     CGRect contentRect = UIEdgeInsetsInsetRect(self.collectionView.frame, self.collectionView.contentInset);
     if (isVert) {
-        float initialPaddingForContraintedDimension = (CGRectGetWidth(contentRect) - [self restrictedDimensionBlockSize]*self.blockPixels.width)/ 2;
-        return CGRectMake(position.x*self.blockPixels.width + initialPaddingForContraintedDimension,
-                          position.y*self.blockPixels.height,
-                          elementSize.width*self.blockPixels.width,
-                          elementSize.height*self.blockPixels.height);
+        return CGRectMake(position.x*self.itemBlockSize.width + ((self.useEveralbumLayout && isLeftEdge) ? -1.5 : sectionInset.left),
+                          position.y*self.itemBlockSize.height + ((indexPath.section+1) * (sectionInset.top + sectionInset.bottom + [self headerSizeForSection:indexPath.section].height)) + (indexPath.section * [self footerSizeForSection:indexPath.section].height) + (indexPath.section),
+                          elementSize.width*self.itemBlockSize.width + ((self.useEveralbumLayout && (isLeftEdge || isRightEdge)) ? 1.5 : 0.0),
+                          elementSize.height*self.itemBlockSize.height);
     } else {
-        float initialPaddingForContraintedDimension = (CGRectGetHeight(contentRect) - [self restrictedDimensionBlockSize]*self.blockPixels.height)/ 2;
-        return CGRectMake(position.x*self.blockPixels.width,
-                          position.y*self.blockPixels.height + initialPaddingForContraintedDimension,
-                          elementSize.width*self.blockPixels.width,
-                          elementSize.height*self.blockPixels.height);
+        return CGRectMake(position.x*self.itemBlockSize.width + ((indexPath.section+1) * (sectionInset.left + [self headerSizeForSection:indexPath.section].width)) + (indexPath.section * [self footerSizeForSection:indexPath.section].width) + (indexPath.section * sectionInset.right),
+                          position.y*self.itemBlockSize.height + sectionInset.top,
+                          elementSize.width*self.itemBlockSize.width,
+                          elementSize.height*self.itemBlockSize.height);
     }
+}
+
+- (void)setUseEveralbumLayout:(BOOL)useEveralbumLayout {
+    _useEveralbumLayout = useEveralbumLayout;
+    
+    if (useEveralbumLayout && UIEdgeInsetsEqualToEdgeInsets(_itemInset, UIEdgeInsetsZero)) {
+        _itemInset = useEveralbumLayout ? UIEdgeInsetsMake(1.5, 1.5, 1.5, 1.5) : UIEdgeInsetsZero;
+    }
+}
+
+- (NSMutableSet *)everalbumBigBlockIndexPaths {
+    if (!_everalbumBigBlockIndexPaths) {
+        _everalbumBigBlockIndexPaths = [NSMutableSet set];
+    }
+    return _everalbumBigBlockIndexPaths;
 }
 
 
 //This method is prefixed with get because it may return its value indirectly
 - (CGSize)getBlockSizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGSize blockSize = CGSizeMake(1, 1);
-    if([self.delegate respondsToSelector:@selector(collectionView:layout:blockSizeForItemAtIndexPath:)])
-        blockSize = [[self delegate] collectionView:[self collectionView] layout:self blockSizeForItemAtIndexPath:indexPath];
+    CGSize blockSize;
+    
+    if (self.useEveralbumLayout && [self.everalbumBigBlockIndexPaths containsObject:indexPath]) {
+        blockSize = CGSizeMake(2, 2);
+    } else {
+        blockSize = CGSizeMake(1, 1);
+    }
+    
+    if([self.delegate respondsToSelector:@selector(blockSizeForItemAtIndexPath:)])
+        blockSize = [self.delegate blockSizeForItemAtIndexPath:indexPath];
+    
     return blockSize;
 }
 
@@ -403,15 +543,14 @@
 // or vertically
 
 - (int) restrictedDimensionBlockSize {
-    BOOL isVert = self.direction == UICollectionViewScrollDirectionVertical;
+    BOOL isVert = self.scrollDirection == UICollectionViewScrollDirectionVertical;
     
-    CGRect contentRect = UIEdgeInsetsInsetRect(self.collectionView.frame, self.collectionView.contentInset);
-    int size = isVert? CGRectGetWidth(contentRect) / self.blockPixels.width : CGRectGetHeight(contentRect) / self.blockPixels.height;
+    int size = isVert? self.collectionView.frame.size.width / self.itemBlockSize.width : self.collectionView.frame.size.height / self.itemBlockSize.height;
     
     if(size == 0) {
         static BOOL didShowMessage;
         if(!didShowMessage) {
-            NSLog(@"%@: cannot fit block of size: %@ in content rect %@!  Defaulting to 1", [self class], NSStringFromCGSize(self.blockPixels), NSStringFromCGRect(contentRect));
+            NSLog(@"%@: cannot fit block of size: %@ in frame %@!  Defaulting to 1", [self class], NSStringFromCGSize(self.itemBlockSize), NSStringFromCGRect(self.collectionView.frame));
             didShowMessage = YES;
         }
         return 1;
@@ -422,6 +561,22 @@
 
 - (void) setFurthestBlockPoint:(CGPoint)point {
     _furthestBlockPoint = CGPointMake(MAX(self.furthestBlockPoint.x, point.x), MAX(self.furthestBlockPoint.y, point.y));
+}
+
+- (CGSize)headerSizeForSection:(NSUInteger)section {
+    CGSize size = CGSizeZero;
+    if ([self.delegate respondsToSelector:@selector(collectionView:layout:referenceSizeForHeaderInSection:)]) {
+        size = [self.delegate collectionView:self.collectionView layout:self referenceSizeForHeaderInSection:section];
+    }
+    return size;
+}
+
+- (CGSize)footerSizeForSection:(NSUInteger)section {
+    CGSize size = CGSizeZero;
+    if ([self.delegate respondsToSelector:@selector(collectionView:layout:referenceSizeForFooterInSection::)]) {
+        size = [self.delegate collectionView:self.collectionView layout:self referenceSizeForFooterInSection:section];
+    }
+    return size;
 }
 
 @end
